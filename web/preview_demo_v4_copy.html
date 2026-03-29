@@ -1,0 +1,4016 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전북 지원사업 통합 수집기 - 데모</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: #F8FAFC;
+  color: #1E293B;
+  overflow: hidden;
+}
+
+.split-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* === 왼쪽 패널 === */
+.left-panel {
+  width: 42%;
+  background: #FFFFFF;
+  border-right: 2px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+}
+
+.left-header {
+  background: linear-gradient(135deg, #1B4F8A, #2E75B6);
+  color: white;
+  padding: 22px 26px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.left-header h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.left-header p {
+  font-size: 0.82rem;
+  color: #BDD7EE;
+}
+
+.left-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 26px;
+}
+
+.control-section {
+  background: #F8FAFC;
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.control-section h3 {
+  font-size: 0.9rem;
+  color: #334155;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.search-box {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 9px 12px;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #2E75B6;
+  box-shadow: 0 0 0 3px rgba(46,117,182,0.1);
+}
+
+.btn-search {
+  padding: 9px 16px;
+  background: #2E75B6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-search:hover {
+  background: #1B4F8A;
+}
+
+.custom-source-item {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.custom-source-input {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.custom-source-input:focus {
+  outline: none;
+  border-color: #2E75B6;
+}
+
+.custom-source-input::placeholder {
+  color: #CBD5E1;
+}
+
+.btn-add-source {
+  padding: 7px 12px;
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-add-source:hover {
+  background: #047857;
+}
+
+.btn-remove-source {
+  padding: 7px 10px;
+  background: #EF4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.btn-remove-source:hover {
+  background: #DC2626;
+}
+
+label {
+  display: block;
+  font-size: 0.78rem;
+  color: #64748B;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+select {
+  width: 100%;
+  padding: 8px 11px;
+  border: 1px solid #CBD5E1;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin-bottom: 12px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: white;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.checkbox-item:hover {
+  border-color: #2E75B6;
+  background: #EFF6FF;
+}
+
+.checkbox-item input {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox-item span {
+  font-size: 0.82rem;
+  color: #1E293B;
+  font-weight: 500;
+}
+
+.btn-collect {
+  width: 100%;
+  padding: 13px 20px;
+  background: linear-gradient(135deg, #1B4F8A, #2E75B6);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(27,79,138,0.3);
+  margin-bottom: 16px;
+}
+
+.btn-collect:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(27,79,138,0.4);
+}
+
+.log-area {
+  background: #0F172A;
+  color: #94A3B8;
+  border-radius: 10px;
+  padding: 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  max-height: 280px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.log-area .head { color: #60A5FA; font-weight: 700; }
+.log-area .info { color: #A5B4FC; }
+.log-area .ok { color: #34D399; font-weight: 600; }
+.log-area .warn { color: #FBBF24; }
+
+/* === 오른쪽 패널 === */
+.right-panel {
+  width: 58%;
+  background: #F1F5F9;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.right-header {
+  background: white;
+  padding: 20px 28px;
+  border-bottom: 2px solid #E2E8F0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.right-header h2 {
+  font-size: 1.25rem;
+  color: #1E293B;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.status-bar {
+  font-size: 0.8rem;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.right-content {
+  padding: 20px 28px;
+}
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.kpi {
+  background: white;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.kpi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.kpi.active {
+  border: 2px solid #2E75B6;
+  box-shadow: 0 0 0 3px rgba(46,117,182,0.1);
+}
+
+.kpi-label {
+  font-size: 0.75rem;
+  color: #64748B;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.kpi-val {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.kpi-sub {
+  font-size: 0.7rem;
+  color: #94A3B8;
+  margin-top: 4px;
+}
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.chart-card h4 {
+  font-size: 0.88rem;
+  color: #334155;
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.stat-bar {
+  height: 8px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.table-card {
+  background: white;
+  border-radius: 10px;
+  padding: 24px 28px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.table-card h4 {
+  font-size: 0.98rem;
+  color: #334155;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.resize-hint {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+thead {
+  background: #F8FAFC;
+  border-bottom: 2px solid #E2E8F0;
+}
+
+th {
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 700;
+  color: #475569;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  position: relative;
+}
+
+th.resizable {
+  cursor: col-resize;
+}
+
+th .resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: col-resize;
+  background: transparent;
+  transition: background 0.2s;
+  border-right: 2px solid transparent;
+}
+
+th .resize-handle:hover {
+  background: rgba(46, 117, 182, 0.1);
+  border-right: 2px solid #2E75B6;
+}
+
+th .resize-handle:active {
+  background: rgba(46, 117, 182, 0.2);
+  border-right: 2px solid #1B4F8A;
+}
+
+th:nth-child(1) { width: 45%; }  /* 공고제목 */
+th:nth-child(2) { width: 20%; }  /* 기관 */
+th:nth-child(3) { width: 11%; }  /* 상태 */
+th:nth-child(4) { width: 16%; }  /* 기간 */
+th:nth-child(5) { width: 11%; }  /* 확인 */
+
+td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #F1F5F9;
+  color: #334155;
+  vertical-align: middle;
+  line-height: 1.6;
+}
+
+tr:hover {
+  background: #F8FAFC;
+  transition: background 0.15s;
+}
+
+.new-badge {
+  background: #EF4444;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  border-radius: 12px;
+  margin-left: 8px;
+  font-weight: 700;
+}
+
+.old-badge {
+  background: #3B82F6;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  border-radius: 12px;
+  margin-left: 8px;
+}
+
+.deadline-badge {
+  background: #F59E0B;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  border-radius: 12px;
+  margin-left: 8px;
+  font-weight: 700;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.deadline-urgent {
+  background: #EF4444;
+}
+
+.status-접수중 { color: #059669; font-weight: 600; font-size: 0.88rem; }
+.status-공고중 { color: #2563EB; font-weight: 600; font-size: 0.88rem; }
+.status-접수마감 { color: #DC2626; font-weight: 600; font-size: 0.88rem; }
+
+.confirmed-time {
+  font-size: 0.78rem;
+  color: #94A3B8;
+}
+
+/* 모달 스타일 */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.2s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: 24px 28px;
+  border-bottom: 2px solid #E2E8F0;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.modal-header h3 {
+  font-size: 1.1rem;
+  color: #1E293B;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.modal-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.modal-meta span {
+  font-size: 0.78rem;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.modal-body {
+  padding: 24px 28px;
+}
+
+.summary-section {
+  margin-bottom: 20px;
+}
+
+.summary-section h4 {
+  font-size: 0.85rem;
+  color: #475569;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.summary-section p, .summary-section ul {
+  font-size: 0.88rem;
+  color: #334155;
+  line-height: 1.7;
+}
+
+.summary-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.summary-section li {
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 6px;
+}
+
+.summary-section li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #2E75B6;
+  font-weight: bold;
+}
+
+.modal-footer {
+  padding: 16px 28px;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #F8FAFC;
+  position: sticky;
+  bottom: 0;
+}
+
+.btn-kakao {
+  padding: 10px 20px;
+  background: #FEE500;
+  color: #3C1E1E;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-kakao:hover {
+  background: #FDD835;
+  transform: translateY(-1px);
+}
+
+.btn-close {
+  padding: 10px 24px;
+  background: #2E75B6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-close:hover {
+  background: #1B4F8A;
+  transform: translateY(-1px);
+}
+
+.title-link {
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.title-link:hover {
+  color: #2E75B6;
+  text-decoration: underline;
+}
+
+/* 로컬 HTML 안내 (Google 검색으로는 열 수 없음) */
+.local-file-hint {
+  font-size: 0.76rem;
+  color: #334155;
+  background: #E0F2FE;
+  border: 1px solid #7DD3FC;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  line-height: 1.55;
+}
+.local-file-hint strong { color: #0C4A6E; }
+.local-file-hint code {
+  font-size: 0.72rem;
+  background: #F0F9FF;
+  padding: 2px 6px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+.local-file-hint-steps {
+  margin: 8px 0 0 0;
+  padding-left: 18px;
+}
+.local-file-hint-steps li { margin-bottom: 5px; }
+.local-file-hint-file {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: #64748B;
+}
+</style>
+</head>
+<body>
+
+<div class="split-container">
+  <!-- 왼쪽 패널 -->
+  <div class="left-panel">
+    <div class="left-header">
+      <h1>🎯 전북 지원사업 수집기</h1>
+      <p>5개 기관 통합 모니터링 시스템</p>
+    </div>
+    
+    <div class="left-content">
+      <div class="local-file-hint" role="note">
+        <strong>구글(인터넷) 검색에는 이 파일이 없습니다.</strong> 웹에 공개된 페이지가 아니라 PC/OneDrive 안의 파일이라 검색 결과가 0건이 정상입니다.<br>
+        <strong>파일명은 정확히</strong> <code>preview_demo_v4_copy.html</code> 입니다. (<code>oreview</code>·<code>preview demo v4</code>처럼 띄어쓰기·철자가 다르면 안 됩니다.)<br>
+        같은 폴더의 <code>OPEN_ME.txt</code> 를 메모장으로 열어 보세요.<br>
+        <strong>더블클릭이 안 될 때</strong> (연결 프로그램 미설정 등):
+        <ul class="local-file-hint-steps">
+          <li>파일 <strong>우클릭</strong> → <strong>연결 프로그램</strong> → <strong>Chrome</strong> 또는 <strong>Microsoft Edge</strong> → 항상 이 앱 사용</li>
+          <li>Chrome/Edge 실행 후 <strong>Ctrl+O</strong> (파일 열기) → 이 HTML 선택</li>
+          <li>탐색기에서 파일을 <strong>브라우저 창 안으로 드래그</strong></li>
+          <li>Windows <strong>설정 → 앱 → 기본 앱 → .html</strong> 에서 브라우저 지정</li>
+        </ul>
+        <span class="local-file-hint-file">파일명: <code>preview_demo_v4_copy.html</code> (확장자 <code>.html</code> 인지 확인)</span>
+      </div>
+      <!-- 키워드 검색 -->
+      <div class="control-section">
+        <h3>🔍 키워드 검색</h3>
+        <div class="search-box">
+          <input type="text" class="search-input" id="searchInput" placeholder="공고 제목, 기관명으로 검색..." onkeypress="if(event.key==='Enter') searchKeyword()">
+          <button class="btn-search" onclick="searchKeyword()">검색</button>
+        </div>
+      </div>
+      
+      <div class="control-section">
+        <h3>⚙️ 수집 설정</h3>
+        
+        <label>연도 선택</label>
+        <select>
+          <option value="2026" selected>2026년</option>
+          <option value="2025">2025년</option>
+        </select>
+        
+        <label>수집 소스 (다중 선택)</label>
+        <div class="checkbox-group">
+          <label class="checkbox-item">
+            <input type="checkbox" checked data-source="jbexport">
+            <span>🚢 전북수출통합지원시스템</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" data-source="bizinfo">
+            <span>🏢 기업마당_전북전체</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" data-source="jbok">
+            <span>🏛️ 전북중소기업본부</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" data-source="jbtp">
+            <span>🔬 전북테크노파크</span>
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" data-source="jbio">
+            <span>🧬 전북바이오융합산업진흥원</span>
+          </label>
+        </div>
+      </div>
+      
+      <!-- 사용자 정의 소스 -->
+      <div class="control-section">
+        <h3>🌐 사용자 정의 소스 추가</h3>
+        <p class="hint-text" style="font-size:12px;color:#64748b;margin:0 0 8px 0;">
+          입력한 URL은 이 PC 브라우저에 저장됩니다. 다음에 열어도 이어서 사용합니다.
+        </p>
+        <div id="customSourcesList">
+          <div class="custom-source-item">
+            <input type="text" class="custom-source-input" placeholder="https://example.com (전북 관련 공고 페이지 URL)" data-index="0">
+            <button class="btn-add-source" onclick="addCustomSource(0)">수집</button>
+          </div>
+          <div class="custom-source-item">
+            <input type="text" class="custom-source-input" placeholder="https://example.com" data-index="1">
+            <button class="btn-add-source" onclick="addCustomSource(1)">수집</button>
+          </div>
+          <div class="custom-source-item">
+            <input type="text" class="custom-source-input" placeholder="https://example.com" data-index="2">
+            <button class="btn-add-source" onclick="addCustomSource(2)">수집</button>
+          </div>
+          <div class="custom-source-item">
+            <input type="text" class="custom-source-input" placeholder="https://example.com" data-index="3">
+            <button class="btn-add-source" onclick="addCustomSource(3)">수집</button>
+          </div>
+          <div class="custom-source-item">
+            <input type="text" class="custom-source-input" placeholder="https://example.com" data-index="4">
+            <button class="btn-add-source" onclick="addCustomSource(4)">수집</button>
+          </div>
+        </div>
+      </div>
+      
+      <button class="btn-collect" onclick="runDemo()">🚀 수집 시작</button>
+      
+      <div class="control-section">
+        <h3>📋 수집 로그</h3>
+        <div class="log-area" id="logArea">대기중… <strong>전북수출(jbexport)</strong> 등은 실제 서버에 POST(getWork1Search.do)로 목록을 요청합니다. 아래 「수집 시작」을 누르면 최신 데이터를 가져옵니다.</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 오른쪽 패널 -->
+  <div class="right-panel">
+    <div class="right-header">
+      <h2>📊 수집 결과</h2>
+      <div class="status-bar" id="statusBarSummary">
+        🕐 마지막: <strong id="statusLastTime">—</strong> · 수집 건수: <strong id="statusTotalCount">0건</strong>
+      </div>
+    </div>
+    
+    <div class="right-content">
+      <!-- KPI 카드 -->
+      <div class="kpi-row">
+        <div class="kpi active" id="kpi-all" onclick="filterData('all')" style="background:#EFF6FF;border-left:4px solid #2E75B6">
+          <div class="kpi-label">전체 공고</div>
+          <div class="kpi-val" style="color:#1B4F8A" id="kpiAllVal">0</div>
+          <div class="kpi-sub">건 (중복제거)</div>
+        </div>
+        <div class="kpi" id="kpi-new" onclick="filterData('new')" style="background:#FFF1F2;border-left:4px solid #EF4444">
+          <div class="kpi-label">🆕 신규</div>
+          <div class="kpi-val" style="color:#DC2626" id="kpiNewVal">0</div>
+          <div class="kpi-sub">미확인</div>
+        </div>
+        <div class="kpi" id="kpi-old" onclick="filterData('old')" style="background:#EFF6FF;border-left:4px solid #3B82F6">
+          <div class="kpi-label">✅ 기존</div>
+          <div class="kpi-val" style="color:#2563EB" id="kpiOldVal">0</div>
+          <div class="kpi-sub">확인됨</div>
+        </div>
+        <div class="kpi" id="kpi-deadline" onclick="filterData('deadline')" style="background:#FEF3C7;border-left:4px solid #F59E0B">
+          <div class="kpi-label">⏰ 마감임박</div>
+          <div class="kpi-val" style="color:#D97706" id="deadlineCount">0</div>
+          <div class="kpi-sub">7일 이내</div>
+        </div>
+        <div class="kpi" style="background:#F8FAFC;border-left:4px solid #94A3B8">
+          <div class="kpi-label">마지막 수집</div>
+          <div class="kpi-val" style="font-size:0.9rem;color:#334155;margin-top:4px" id="lastCollectTime">—</div>
+          <div class="kpi-sub"></div>
+        </div>
+      </div>
+      
+      <!-- 차트 -->
+      <div class="chart-row">
+        <div class="chart-card">
+          <h4>상태별 분포</h4>
+          <div class="stat-row">
+            <span style="min-width:70px;font-size:0.82rem">접수중</span>
+            <div class="stat-bar" style="width:4px;background:#22C55E" id="barStatReceiving"></div>
+            <strong style="font-size:0.85rem" id="statCntReceiving">0</strong>
+          </div>
+          <div class="stat-row">
+            <span style="min-width:70px;font-size:0.82rem">공고중</span>
+            <div class="stat-bar" style="width:4px;background:#3B82F6" id="barStatNotice"></div>
+            <strong style="font-size:0.85rem" id="statCntNotice">0</strong>
+          </div>
+          <div class="stat-row">
+            <span style="min-width:70px;font-size:0.82rem">접수마감</span>
+            <div class="stat-bar" style="width:4px;background:#EF4444" id="barStatClosed"></div>
+            <strong style="font-size:0.85rem" id="statCntClosed">0</strong>
+          </div>
+        </div>
+        
+        <div class="chart-card">
+          <h4>소스별 분포</h4>
+          <div class="stat-row">
+            <span style="min-width:100px;font-size:0.78rem">전북수출</span>
+            <div class="stat-bar" style="width:4px;background:#1B4F8A" id="barJbexport"></div>
+            <strong style="font-size:0.85rem" id="srcJbexport">0</strong>
+          </div>
+          <div class="stat-row">
+            <span style="min-width:100px;font-size:0.78rem">기업마당</span>
+            <div class="stat-bar" style="width:4px;background:#059669" id="barBizinfo"></div>
+            <strong style="font-size:0.85rem" id="srcBizinfo">0</strong>
+          </div>
+          <div class="stat-row">
+            <span style="min-width:100px;font-size:0.78rem">중소기업본부</span>
+            <div class="stat-bar" style="width:4px;background:#7C3AED" id="barJbok"></div>
+            <strong style="font-size:0.85rem" id="srcJbok">0</strong>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 테이블 -->
+      <div class="table-card">
+        <h4 id="tableTitle">📋 전체 공고 목록 (0건)</h4>
+        <div class="resize-hint">💡 컬럼 경계선을 드래그하여 너비를 조정할 수 있습니다</div>
+        <table>
+          <thead>
+            <tr>
+              <th><span>공고제목</span><div class="resize-handle"></div></th>
+              <th><span>기관</span><div class="resize-handle"></div></th>
+              <th><span>상태</span><div class="resize-handle"></div></th>
+              <th><span>기간</span><div class="resize-handle"></div></th>
+              <th><span>확인</span></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 요약 모달 -->
+<div class="modal-overlay" id="summaryModal" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modalTitle"></h3>
+      <div class="modal-meta" id="modalMeta"></div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="btn-kakao" onclick="shareKakao()">💬 공유하기</button>
+      <button class="btn-close" onclick="closeModal()">닫기</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/** 수집 결과만 저장 (샘플/목 JSON 없음). 「수집 시작」 시 fetch 로 채움 */
+let TABLE_ROWS = [];
+/** 목록 1페이지당 행 수·기본 폴백 (dtLength 미설정 시) */
+const DEFAULT_PAGE_SIZE = 10;
+/** 로그에 찍혀야 할 파이프라인 빌드 식별자(구버전 HTML 캐시 여부 확인용) */
+const JBEXPORT_PIPELINE_BUILD = 'proxy-health-diag-20250325';
+
+/** jbexport: 브라우저→jbexport 직접 fetch 대신 Flask 프록시(jbexport_proxy.py) 사용 */
+const JBEXPORT_PROXY_ORIGIN = 'http://127.0.0.1:5000';
+const JBEXPORT_USE_PROXY = true;
+/** 프록시 연동 시 jbexport 실요청과 동일한 DataTables length */
+const JBEXPORT_PROXY_LIST_LENGTH = 10;
+
+/**
+ * 디버그 세션 15fb3d: localhost 인제스트 + 동일 페이로드를 버퍼에 저장(워크스페이스 debug-15fb3d.log 미생성 시 복사용).
+ * @param {{location:string,message:string,data?:object,hypothesisId:string}} o
+ */
+function __debugIngest15fb3d(o) {
+  const line = { sessionId: '15fb3d', timestamp: Date.now(), ...o };
+  try {
+    window.__DEBUG_INGEST_BUFFER_15FB3D = window.__DEBUG_INGEST_BUFFER_15FB3D || [];
+    window.__DEBUG_INGEST_BUFFER_15FB3D.push(line);
+  } catch (_) {
+    /* ignore */
+  }
+  // #region agent log
+  fetch('http://127.0.0.1:7814/ingest/b82c44d2-0bd9-48a8-b66c-ce48be17bef8', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '15fb3d' },
+    body: JSON.stringify(line),
+  }).catch(() => {});
+  // #endregion
+}
+
+/** NDJSON 한 줄씩 — 프로젝트 폴더로 옮기면 Cursor가 debug-15fb3d.log 를 읽을 수 있음 */
+function __debugDownloadNdjson15fb3d(buf) {
+  if (!buf || !buf.length) return;
+  try {
+    const text = buf.map((o) => JSON.stringify(o)).join('\n');
+    const blob = new Blob([text], { type: 'application/x-ndjson;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'debug-15fb3d.log';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => {
+      try {
+        URL.revokeObjectURL(url);
+      } catch (_) {
+        /* ignore */
+      }
+    }, 2000);
+  } catch (_) {
+    /* ignore */
+  }
+}
+
+/** 클립보드에 NDJSON → Cursor에서 프로젝트 루트에 debug-15fb3d.log 로 저장 가능 */
+async function __debugCopyNdjson15fb3d(buf) {
+  if (!buf || !buf.length) return false;
+  try {
+    const text = buf.map((o) => JSON.stringify(o)).join('\n');
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (_) {
+    /* ignore */
+  }
+  return false;
+}
+
+/**
+ * 저장 대화상자로 프로젝트 폴더(예: 커서0321)에 직접 저장 — Chrome/Edge + 보안 컨텍스트(https 등)에서 동작.
+ * file:// 에서는 보통 비활성 → 다운로드/클립보드로 대체.
+ */
+async function __debugSaveWithFilePicker15fb3d(buf) {
+  if (!buf || !buf.length || typeof window.showSaveFilePicker !== 'function') return false;
+  try {
+    const text = buf.map((o) => JSON.stringify(o)).join('\n');
+    const handle = await window.showSaveFilePicker({
+      suggestedName: 'debug-15fb3d.log',
+      types: [
+        {
+          description: 'NDJSON log',
+          accept: { 'text/plain': ['.log'] },
+        },
+      ],
+    });
+    const writable = await handle.createWritable();
+    await writable.write(text);
+    await writable.close();
+    return true;
+  } catch (e) {
+    if (e && e.name === 'AbortError') return false;
+    return false;
+  }
+}
+
+let currentFilter = 'all';
+let currentFilteredData = TABLE_ROWS;
+let currentModalItem = null; // 현재 열린 모달의 공고 정보
+let customSources = []; // 사용자 정의 소스
+
+/** 브라우저에 사용자 정의 URL 목록 저장 (localStorage) */
+const CUSTOM_SOURCES_STORAGE_KEY = 'preview_demo_v4_customSources_v1';
+
+function saveCustomSourcesToStorage() {
+  try {
+    const urls = customSources.map((s) => s.url).filter(Boolean);
+    localStorage.setItem(CUSTOM_SOURCES_STORAGE_KEY, JSON.stringify(urls));
+  } catch (_) {
+    /* ignore quota / private mode */
+  }
+}
+
+function restoreCustomSourcesFromStorage() {
+  let raw = null;
+  try {
+    raw = localStorage.getItem(CUSTOM_SOURCES_STORAGE_KEY);
+  } catch (_) {
+    return;
+  }
+  if (!raw) return;
+  let urls = [];
+  try {
+    urls = JSON.parse(raw);
+  } catch (_) {
+    return;
+  }
+  if (!Array.isArray(urls) || urls.length === 0) return;
+  const inputs = document.querySelectorAll('.custom-source-input');
+  let k = 0;
+  for (const url of urls) {
+    if (!url || typeof url !== 'string') continue;
+    const u = url.trim();
+    if (!u.startsWith('http://') && !u.startsWith('https://')) continue;
+    if (k >= inputs.length) break;
+    const idx = k;
+    const inp = inputs[k];
+    inp.value = u;
+    inp.disabled = true;
+    const btn = inp.parentElement.querySelector('.btn-add-source');
+    if (btn) {
+      btn.textContent = '✓ 추가됨';
+      btn.style.background = '#94A3B8';
+      btn.disabled = true;
+    }
+    if (!inp.parentElement.querySelector('.btn-remove-source')) {
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'btn-remove-source';
+      removeBtn.textContent = '×';
+      removeBtn.onclick = () => removeCustomSource(idx, u);
+      inp.parentElement.appendChild(removeBtn);
+    }
+    customSources.push({ url: u });
+    k++;
+  }
+}
+
+/** 프록시/캐시에 묻지 않도록 매 요청마다 고유 쿼리(_cb) 부여 */
+function withCacheBust(url) {
+  if (!url || typeof url !== 'string') return url;
+  try {
+    const u = new URL(url, window.location.href);
+    u.searchParams.set('_cb', String(Date.now()) + '_' + String(Math.random()).slice(2, 8));
+    return u.toString();
+  } catch (_) {
+    const sep = url.includes('?') ? '&' : '?';
+    return url + sep + '_cb=' + Date.now();
+  }
+}
+
+// 중복 실행 방지
+let __state = {
+  collecting: false,
+};
+
+// 날짜 형식 변환: 2026-02-05 → 26.2.5
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  const match = dateStr.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return dateStr;
+  const year = match[1].substring(2);
+  const month = parseInt(match[2]);
+  const day = parseInt(match[3]);
+  return `${year}.${month}.${day}`;
+}
+
+// 마감일까지 남은 일수 계산
+function getDaysUntilDeadline(periodStr) {
+  if (!periodStr) return null;
+  const match = periodStr.match(/~(\d{4}-\d{2}-\d{2})/);
+  if (!match) return null;
+  
+  const endDate = new Date(match[1]);
+  endDate.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const diffTime = endDate - today;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  return diffDays;
+}
+
+// 마감임박 여부 확인
+function isDeadlineNear(periodStr, days = 7) {
+  const daysLeft = getDaysUntilDeadline(periodStr);
+  return daysLeft !== null && daysLeft >= 0 && daysLeft <= days;
+}
+
+// 마감임박 공고 수 계산
+function countDeadlineNear() {
+  return TABLE_ROWS.filter(d => {
+    if (d.status === '접수마감') return false;
+    return isDeadlineNear(d.period, 7);
+  }).length;
+}
+
+/** TABLE_ROWS 기준으로 오른쪽 차트(상태·소스) 막대 갱신 */
+function updateChartsFromTableRows() {
+  let nRecv = 0;
+  let nNotice = 0;
+  let nClosed = 0;
+  let nJe = 0;
+  let nBi = 0;
+  let nJb = 0;
+  for (const d of TABLE_ROWS) {
+    const st = d.status || '';
+    if (st === '접수중') nRecv++;
+    else if (st === '공고중') nNotice++;
+    else if (st === '접수마감') nClosed++;
+    const ag = String(d.agency || '');
+    if (d.jbexportRow || (d.spSeq != null && String(d.spSeq).trim() !== '') || ag.includes('전북수출')) {
+      nJe++;
+    } else if (/기업마당|bizinfo/i.test(ag)) nBi++;
+    else if (/jbok|중소기업|전북중소|테크노|jbtp|바이오|jbio/i.test(ag)) nJb++;
+    else nJe++;
+  }
+  const setTxt = (id, v) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(v);
+  };
+  setTxt('statCntReceiving', nRecv);
+  setTxt('statCntNotice', nNotice);
+  setTxt('statCntClosed', nClosed);
+  const maxSt = Math.max(nRecv, nNotice, nClosed, 1);
+  const wSt = (id, n) => {
+    const el = document.getElementById(id);
+    if (el) el.style.width = Math.max(4, Math.round((n / maxSt) * 100)) + 'px';
+  };
+  wSt('barStatReceiving', nRecv);
+  wSt('barStatNotice', nNotice);
+  wSt('barStatClosed', nClosed);
+  setTxt('srcJbexport', nJe);
+  setTxt('srcBizinfo', nBi);
+  setTxt('srcJbok', nJb);
+  const maxSrc = Math.max(nJe, nBi, nJb, 1);
+  const wSrc = (id, n) => {
+    const el = document.getElementById(id);
+    if (el) el.style.width = Math.max(4, Math.round((n / maxSrc) * 110)) + 'px';
+  };
+  wSrc('barJbexport', nJe);
+  wSrc('barBizinfo', nBi);
+  wSrc('barJbok', nJb);
+}
+
+function updateLastCollectUi() {
+  const now = new Date();
+  const pad = (x) => String(x).padStart(2, '0');
+  const ts = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  const lt = document.getElementById('lastCollectTime');
+  if (lt) {
+    lt.innerHTML = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}<br>${pad(now.getHours())}:${pad(
+      now.getMinutes()
+    )}`;
+  }
+  const st = document.getElementById('statusLastTime');
+  if (st) st.textContent = ts;
+  const stc = document.getElementById('statusTotalCount');
+  if (stc) stc.textContent = `${TABLE_ROWS.length}건`;
+}
+
+// 카카오톡 공유 (Web Share API 사용)
+function shareKakao() {
+  if (!currentModalItem) return;
+  
+  const item = currentModalItem;
+  const summary = item.summary || {};
+  
+  const title = `📢 ${item.title}`;
+  const text = `📅 기간: ${item.period}
+🏢 기관: ${item.agency}
+📌 상태: ${item.status}
+
+🎯 지원대상: ${summary.target || '-'}
+💰 지원규모: ${summary.amount || '-'}
+📝 신청방법: ${summary.howto || '-'}
+
+✅ 전북 지원사업 통합 수집기`;
+
+  // Web Share API 지원 여부 확인
+  if (navigator.share) {
+    navigator.share({
+      title: title,
+      text: text,
+    })
+    .then(() => {
+      console.log('공유 성공');
+    })
+    .catch((error) => {
+      console.log('공유 취소 또는 실패:', error);
+      // 실패시 클립보드 복사로 폴백
+      fallbackCopyText(title + '\n\n' + text);
+    });
+  } else {
+    // Web Share API 미지원시 클립보드 복사
+    fallbackCopyText(title + '\n\n' + text);
+  }
+}
+
+// 클립보드 대체 방법
+function fallbackCopyText(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    alert('📋 카카오톡 공유 내용이 복사되었습니다!\n\n카카오톡을 열고 붙여넣기(Ctrl+V)하세요.');
+  } catch (err) {
+    alert('복사에 실패했습니다. 수동으로 복사해주세요:\n\n' + text);
+  }
+  document.body.removeChild(textarea);
+}
+
+// 키워드 검색
+function searchKeyword() {
+  const keyword = document.getElementById('searchInput').value.trim();
+  
+  if (!keyword) {
+    alert('검색어를 입력해주세요.');
+    return;
+  }
+  
+  const filtered = TABLE_ROWS.filter(d => {
+    const searchText = (d.title + ' ' + d.agency + ' ' + (d.summary?.content || '')).toLowerCase();
+    return searchText.includes(keyword.toLowerCase());
+  });
+  
+  currentFilteredData = filtered;
+  currentFilter = 'search';
+  
+  // KPI 카드 active 제거
+  document.querySelectorAll('.kpi').forEach(k => k.classList.remove('active'));
+  
+  document.getElementById('tableTitle').textContent = `🔍 검색 결과: "${keyword}" (${filtered.length}건)`;
+  renderTable(filtered);
+  
+  if (filtered.length === 0) {
+    alert(`"${keyword}"에 대한 검색 결과가 없습니다.`);
+  }
+}
+
+// 사용자 정의 소스 추가
+function addCustomSource(index) {
+  const inputs = document.querySelectorAll('.custom-source-input');
+  const url = inputs[index].value.trim();
+  
+  if (!url) {
+    alert('URL을 입력해주세요.');
+    return;
+  }
+  
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    alert('올바른 URL 형식이 아닙니다.\n(예: https://example.com)');
+    return;
+  }
+
+  // 중복 확인
+  const exists = customSources.some(s => s.url === url);
+  if (exists) {
+    alert('이미 추가된 소스입니다.');
+    return;
+  }
+
+  // 사용자 URL은 여기서는 저장만 하고,
+  // 실제 수집은 runRealCollect()에서 fetch()로 가져옵니다.
+  customSources.push({ url });
+  saveCustomSourcesToStorage();
+
+  // 버튼 변경
+  const btn = inputs[index].parentElement.querySelector('.btn-add-source');
+  btn.textContent = '✓ 추가됨';
+  btn.style.background = '#94A3B8';
+  btn.disabled = true;
+  
+  // 제거 버튼 추가
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'btn-remove-source';
+  removeBtn.textContent = '×';
+  removeBtn.onclick = () => removeCustomSource(index, url);
+  inputs[index].parentElement.appendChild(removeBtn);
+  
+  inputs[index].disabled = true;
+  
+  alert(`✅ 사용자 정의 소스가 추가되었습니다!\n\n"🚀 수집 시작" 버튼을 클릭하면\n추가된 소스의 공고도 함께 수집됩니다.`);
+}
+
+// 사용자 정의 소스 제거
+function removeCustomSource(index, url) {
+  customSources = customSources.filter(s => s.url !== url);
+  saveCustomSourcesToStorage();
+
+  const inputs = document.querySelectorAll('.custom-source-input');
+  const item = inputs[index].parentElement;
+  
+  // 버튼 복원
+  const btn = item.querySelector('.btn-add-source');
+  btn.textContent = '수집';
+  btn.style.background = '#059669';
+  btn.disabled = false;
+  
+  // 제거 버튼 삭제
+  const removeBtn = item.querySelector('.btn-remove-source');
+  if (removeBtn) removeBtn.remove();
+  
+  inputs[index].disabled = false;
+  inputs[index].value = '';
+}
+
+// 필터링
+function filterData(type) {
+  currentFilter = type;
+  
+  document.querySelectorAll('.kpi').forEach(k => k.classList.remove('active'));
+  if (type !== 'last') {
+    document.getElementById('kpi-' + type).classList.add('active');
+  }
+  
+  let filtered = TABLE_ROWS;
+  if (type === 'new') {
+    filtered = TABLE_ROWS.filter(d => d.isNew);
+  } else if (type === 'old') {
+    filtered = TABLE_ROWS.filter(d => !d.isNew);
+  } else if (type === 'deadline') {
+    filtered = TABLE_ROWS.filter(d => {
+      if (d.status === '접수마감') return false;
+      return isDeadlineNear(d.period, 7);
+    });
+  }
+  
+  currentFilteredData = filtered;
+  
+  const titles = {
+    'all': '📋 전체 공고 목록',
+    'new': '📋 신규 공고 목록',
+    'old': '📋 기존 공고 목록 (확인됨)',
+    'deadline': '📋 마감임박 공고 목록 (7일 이내)'
+  };
+  document.getElementById('tableTitle').textContent = `${titles[type]} (${filtered.length}건)`;
+  
+  renderTable(filtered);
+}
+
+// 테이블 렌더링
+function renderTable(data) {
+  if (!data) data = currentFilteredData;
+  const tbody = document.getElementById('tableBody');
+  if (!data || data.length === 0) {
+    tbody.innerHTML =
+      '<tr><td colspan="5" style="text-align:center;padding:2rem;color:#64748B;line-height:1.6;">데이터가 없습니다. 왼쪽에서 <strong>전북수출통합지원시스템</strong> 등 소스를 선택한 뒤 <strong>수집 시작</strong>을 누르면<br>jbexport 서버에 POST(getWork1Search.do)로 실시간 목록을 요청합니다.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map((d, idx) => {
+    const badge = d.isNew 
+      ? '<span class="new-badge">NEW</span>' 
+      : '<span class="old-badge">확인됨</span>';
+    
+    // 마감임박 배지
+    let deadlineBadge = '';
+    if (d.status !== '접수마감') {
+      const daysLeft = getDaysUntilDeadline(d.period);
+      if (daysLeft !== null && daysLeft >= 0) {
+        if (daysLeft <= 3) {
+          deadlineBadge = `<span class="deadline-badge deadline-urgent">🔥 D-${daysLeft}</span>`;
+        } else if (daysLeft <= 7) {
+          deadlineBadge = `<span class="deadline-badge">⏰ D-${daysLeft}</span>`;
+        }
+      }
+    }
+    
+    const confirmedCol = d.isNew 
+      ? '<span style="color:#CBD5E1;font-size:0.75rem">—</span>'
+      : `<div class="confirmed-time">${formatDate(d.confirmedAt)}</div>`;
+    
+    return `
+      <tr>
+        <td><span class="title-link" onclick="openModal(${idx})" style="font-size:0.9rem;font-weight:500;">${d.title}</span>${badge}${deadlineBadge}</td>
+        <td style="font-size:0.86rem;color:#475569;">${d.agency}</td>
+        <td><span class="status-${d.status}">${d.status}</span></td>
+        <td style="font-size:0.86rem;color:#64748B;">${d.period}</td>
+        <td>${confirmedCol}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// 모달 열기
+function openModal(index) {
+  const item = currentFilteredData[index];
+  if (!item) return;
+  
+  currentModalItem = item; // 카카오톡 공유용 저장
+  
+  document.getElementById('modalTitle').textContent = item.title;
+  
+  const meta = `
+    <span>📅 ${item.period}</span>
+    <span>🏢 ${item.agency}</span>
+    <span class="status-${item.status}">${item.status}</span>
+  `;
+  document.getElementById('modalMeta').innerHTML = meta;
+  
+  const summary = item.summary || {
+    target: '상세 정보 준비중',
+    content: '공고 내용을 확인 중입니다.',
+    howto: '담당 기관에 문의하세요.',
+    amount: '-'
+  };
+
+  const jbExtra =
+    item.jbexportRow && item.detailUrl
+      ? `<div class="summary-section">
+      <h4>🔗 상세 URL</h4>
+      <p style="word-break:break-all;font-size:0.85rem;">${item.detailUrl}</p>
+    </div>
+    <div class="summary-section">
+      <h4>📎 첨부파일 URL (| 구분)</h4>
+      <p style="word-break:break-all;font-size:0.82rem;">${(item.jbexportAttachments || '—').split('|').join('<br>')}</p>
+    </div>`
+      : '';
+  
+  const body = `${jbExtra}
+    <div class="summary-section">
+      <h4>🎯 지원대상</h4>
+      <p>${summary.target}</p>
+    </div>
+    <div class="summary-section">
+      <h4>📋 지원내용</h4>
+      <p>${summary.content}</p>
+    </div>
+    <div class="summary-section">
+      <h4>📝 신청방법</h4>
+      <p>${summary.howto}</p>
+    </div>
+    <div class="summary-section">
+      <h4>💰 지원규모</h4>
+      <p>${summary.amount}</p>
+    </div>
+  `;
+  document.getElementById('modalBody').innerHTML = body;
+  
+  document.getElementById('summaryModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// 모달 닫기
+function closeModal(event) {
+  if (event && event.target.classList.contains('modal-content')) return;
+  document.getElementById('summaryModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/*
+ * === 전북수출 jbexport 수집 파이프라인 (전자정부 DataTables) ===
+ *
+ *   [목록 API]  POST …/getWork1Search.do
+ *               start = 0, 10, 20, 30 … (= 0 + n×length, length=dtLength 기본 10)
+ *                    ↓
+ *               JSON 목록 (data / aaData / rows)
+ *                    ↓
+ *               spSeq 추출 (행마다)
+ *                    ↓
+ *   [상세 페이지]  GET …/detail1.do?menuUUID=…&spSeq=번호
+ *                    ↓
+ *               HTML 가져오기 (직접 또는 CORS 시 프록시)
+ *                    ↓
+ *               본문 div 영역 탐색 (jbexportGetMainContentMeta)
+ *                    ↓
+ *               텍스트 추출 (태그 제거·공백 정리)
+ *                    ↓
+ *   [저장]        브라우저 메모리 테이블 TABLE_ROWS 갱신 — 초기값은 빈 배열, 수집 시 실시간 API 결과로 채움
+ *
+ *   기본: jbexportTestMode = false → start += length 로 전체 목록·상세 수집, listPagesMax 까지
+ *   테스트: jbexportTestMode = true → start=0 목록 1회, 상세 1건만
+ *   결과: window.__JBEXPORT_LAST_ROWS + 수집 후 jbexport_list.csv 다운로드
+ */
+
+/** view1.do listUrl → 동일 폴더의 getWork1Search.do / detail1·view.do / menuUUID */
+function jbexportPathsFromListUrl(listUrl) {
+  const u = new URL(listUrl);
+  const dir = u.pathname.replace(/[^/]*$/, '');
+  const origin = u.origin;
+  const menuUUID = u.searchParams.get('menuUUID') || '';
+  return {
+    getWork1Search: `${origin}${dir}getWork1Search.do`,
+    viewDetail: `${origin}${dir}view.do`,
+    detail1: `${origin}${dir}detail1.do`,
+    menuUUID,
+  };
+}
+
+/**
+ * 상세 URL 조합 — 식별자 종류에 따라 detail1.do?spSeq= 또는 view.do?idx=
+ * @param {{ detailPath: 'detail1'|'view', paramName: 'spSeq'|'idx', value: string }} meta
+ */
+function jbexportBuildDetailUrl(paths, meta) {
+  if (!meta || !meta.value) return '';
+  const base = meta.detailPath === 'detail1' ? paths.detail1 : paths.viewDetail;
+  const v = new URL(base);
+  if (paths.menuUUID) v.searchParams.set('menuUUID', paths.menuUUID);
+  v.searchParams.set(meta.paramName || 'spSeq', String(meta.value));
+  return v.toString();
+}
+
+function jbexportBuildDetailViewUrl(menuUUID, idx, viewDetailBase) {
+  const v = new URL(viewDetailBase);
+  if (menuUUID) v.searchParams.set('menuUUID', menuUUID);
+  v.searchParams.set('idx', String(idx));
+  return v.toString();
+}
+
+/** detail1.do?menuUUID=…&spSeq=… (상세 식별자는 spSeq만 사용) */
+function jbexportBuildSpSeqDetailUrl(paths, spSeq) {
+  const v = new URL(paths.detail1);
+  if (paths.menuUUID) v.searchParams.set('menuUUID', paths.menuUUID);
+  v.searchParams.set('spSeq', String(spSeq));
+  return v.toString();
+}
+
+/** getWork1Search 응답에서 목록 행 배열 (페이지네이션은 행 개수 기준) */
+function jbexportListJsonRowsArray(json) {
+  const rows =
+    json?.data ??
+    json?.aaData ??
+    json?.rows ??
+    json?.result?.data ??
+    json?.result?.rows ??
+    json?.resultList ??
+    json?.list;
+  return Array.isArray(rows) ? rows : [];
+}
+
+/** 총 건수 (DataTables: recordsTotal 등) */
+function jbexportParseListTotalCount(json) {
+  if (!json || typeof json !== 'object') return null;
+  const keys = [
+    'recordsTotal',
+    'recordsFiltered',
+    'total',
+    'iTotalRecords',
+    'iTotalDisplayRecords',
+    'totCnt',
+  ];
+  for (const k of keys) {
+    if (json[k] != null && json[k] !== '') {
+      const n = Number(json[k]);
+      if (Number.isFinite(n) && n >= 0) return n;
+    }
+  }
+  const nested = json?.result;
+  if (nested && typeof nested === 'object') {
+    for (const k of keys) {
+      if (nested[k] != null && nested[k] !== '') {
+        const n = Number(nested[k]);
+        if (Number.isFinite(n) && n >= 0) return n;
+      }
+    }
+  }
+  return null;
+}
+
+/** HTML/문자열 셀에서 spSeq=숫자 추출 (aaData 문자열 행 대비) */
+function jbexportSpSeqFromStringChunk(s) {
+  if (s == null || typeof s !== 'string') return null;
+  const m =
+    s.match(/[?&]spSeq=(\d+)/i) ||
+    s.match(/spSeq['"]?\s*[:=]\s*['"]?(\d+)/i) ||
+    s.match(/spSeq\s*=\s*(\d+)/i);
+  return m ? String(m[1]).trim() : null;
+}
+
+/**
+ * 행에서 spSeq만 추출 (idx 미사용)
+ * @returns {{ value: string|null, fieldName: string|null, rowKeys: string }}
+ */
+function jbexportRowExtractSpSeqMeta(row) {
+  const tryObj = (obj, keys, fieldName) => {
+    const rowKeys = keys.join(', ');
+    if (obj.spSeq != null && String(obj.spSeq).trim() !== '') {
+      return { value: String(obj.spSeq).trim(), fieldName, rowKeys };
+    }
+    if (obj.SP_SEQ != null && String(obj.SP_SEQ).trim() !== '') {
+      return {
+        value: String(obj.SP_SEQ).trim(),
+        fieldName: fieldName.startsWith('[') ? fieldName.replace(/spSeq/i, 'SP_SEQ') : 'SP_SEQ',
+        rowKeys,
+      };
+    }
+    for (const k of keys) {
+      if (/^spSeq$/i.test(k) && obj[k] != null && String(obj[k]).trim() !== '') {
+        return {
+          value: String(obj[k]).trim(),
+          fieldName: fieldName.includes('[') ? `[${fieldName.match(/\d+/)?.[0] || '0'}].${k}` : k,
+          rowKeys,
+        };
+      }
+    }
+    return null;
+  };
+
+  if (row == null) return { value: null, fieldName: null, rowKeys: '(null)' };
+  if (typeof row === 'object' && !Array.isArray(row)) {
+    const keys = Object.keys(row).sort();
+    const got = tryObj(row, keys, 'spSeq');
+    if (got) return got;
+    const fromStr = jbexportSpSeqFromStringChunk(JSON.stringify(row));
+    if (fromStr) return { value: fromStr, fieldName: 'object.json', rowKeys: keys.join(', ') };
+    return { value: null, fieldName: null, rowKeys: keys.join(', ') };
+  }
+  if (Array.isArray(row)) {
+    const rowKeys = jbexportRowKeysDesc(row);
+    for (let i = 0; i < row.length; i++) {
+      const cell = row[i];
+      if (typeof cell === 'string') {
+        const fromStr = jbexportSpSeqFromStringChunk(cell);
+        if (fromStr) return { value: fromStr, fieldName: `[${i}].html`, rowKeys };
+        continue;
+      }
+      if (!cell || typeof cell !== 'object' || Array.isArray(cell)) continue;
+      const keys = Object.keys(cell).sort();
+      const got = tryObj(cell, keys, `[${i}].spSeq`);
+      if (got) return { ...got, rowKeys };
+    }
+    return { value: null, fieldName: null, rowKeys };
+  }
+  return { value: null, fieldName: null, rowKeys: String(row) };
+}
+
+/** 목록 JSON → spSeq 문자열 배열 */
+function jbexportExtractSpSeqListFromJson(json) {
+  const rows = json?.data ?? json?.aaData ?? json?.rows ?? [];
+  if (!Array.isArray(rows)) return [];
+  const out = [];
+  for (const row of rows) {
+    const m = jbexportRowExtractSpSeqMeta(row);
+    if (m.value) out.push(m.value);
+  }
+  return out;
+}
+
+/** 첫 행 구조 로그용: 키/배열 요약 */
+function jbexportRowKeysDesc(row) {
+  if (row == null) return '(null)';
+  if (Array.isArray(row)) {
+    return row
+      .map((c, i) => {
+        if (c && typeof c === 'object' && !Array.isArray(c)) return `[${i}]{${Object.keys(c).sort().join(',')}}`;
+        return `[${i}]:${typeof c}`;
+      })
+      .join(' | ');
+  }
+  if (typeof row === 'object') return Object.keys(row).sort().join(', ');
+  return String(row);
+}
+
+/**
+ * DataTables 행에서 상세 식별자 추출 — spSeq(→detail1.do) 우선, idx(→view.do) 차순
+ * @returns {{ value: string|null, fieldName: string|null, rowKeys: string, paramName: 'spSeq'|'idx', detailPath: 'detail1'|'view' }}
+ */
+function jbexportRowExtractDetailIdMeta(row) {
+  const empty = (rk) => ({
+    value: null,
+    fieldName: null,
+    rowKeys: rk,
+    paramName: 'spSeq',
+    detailPath: 'detail1',
+  });
+
+  const pickSpSeq = (obj, keys, fieldName) => {
+    const rowKeys = keys.join(', ');
+    if (obj.spSeq != null && String(obj.spSeq).trim() !== '') {
+      return {
+        value: String(obj.spSeq).trim(),
+        fieldName,
+        rowKeys,
+        paramName: 'spSeq',
+        detailPath: 'detail1',
+      };
+    }
+    if (obj.SP_SEQ != null && String(obj.SP_SEQ).trim() !== '') {
+      return {
+        value: String(obj.SP_SEQ).trim(),
+        fieldName: fieldName.startsWith('[') ? fieldName.replace(/spSeq/i, 'SP_SEQ') : 'SP_SEQ',
+        rowKeys,
+        paramName: 'spSeq',
+        detailPath: 'detail1',
+      };
+    }
+    for (const k of keys) {
+      if (/^spSeq$/i.test(k) && obj[k] != null && String(obj[k]).trim() !== '') {
+        return {
+          value: String(obj[k]).trim(),
+          fieldName: fieldName.includes('[') ? `${fieldName.split('.')[0]}.${k}` : k,
+          rowKeys,
+          paramName: 'spSeq',
+          detailPath: 'detail1',
+        };
+      }
+    }
+    return null;
+  };
+
+  const pickIdx = (obj, keys, fieldName) => {
+    const rowKeys = keys.join(', ');
+    if (obj.idx != null && String(obj.idx).trim() !== '') {
+      return {
+        value: String(obj.idx).trim(),
+        fieldName,
+        rowKeys,
+        paramName: 'idx',
+        detailPath: 'view',
+      };
+    }
+    if (obj.IDX != null && String(obj.IDX).trim() !== '') {
+      return {
+        value: String(obj.IDX).trim(),
+        fieldName: fieldName.startsWith('[') ? fieldName.replace(/idx/i, 'IDX') : 'IDX',
+        rowKeys,
+        paramName: 'idx',
+        detailPath: 'view',
+      };
+    }
+    for (const k of keys) {
+      if (/^idx$/i.test(k) && obj[k] != null && String(obj[k]).trim() !== '') {
+        return {
+          value: String(obj[k]).trim(),
+          fieldName: fieldName.includes('[') ? `${fieldName.split('.')[0]}.${k}` : k,
+          rowKeys,
+          paramName: 'idx',
+          detailPath: 'view',
+        };
+      }
+    }
+    return null;
+  };
+
+  if (row == null) return empty('(null)');
+  if (typeof row === 'object' && !Array.isArray(row)) {
+    const keys = Object.keys(row).sort();
+    return (
+      pickSpSeq(row, keys, 'spSeq') ||
+      pickIdx(row, keys, 'idx') || {
+        value: null,
+        fieldName: null,
+        rowKeys: keys.join(', '),
+        paramName: 'spSeq',
+        detailPath: 'detail1',
+      }
+    );
+  }
+  if (Array.isArray(row)) {
+    const rowKeys = jbexportRowKeysDesc(row);
+    for (let i = 0; i < row.length; i++) {
+      const cell = row[i];
+      if (!cell || typeof cell !== 'object' || Array.isArray(cell)) continue;
+      const keys = Object.keys(cell).sort();
+      const sp = pickSpSeq(cell, keys, `[${i}].spSeq`);
+      if (sp) return { ...sp, rowKeys };
+      const ix = pickIdx(cell, keys, `[${i}].idx`);
+      if (ix) return { ...ix, rowKeys };
+    }
+    return { value: null, fieldName: null, rowKeys, paramName: 'spSeq', detailPath: 'detail1' };
+  }
+  return { value: null, fieldName: null, rowKeys: String(row), paramName: 'spSeq', detailPath: 'detail1' };
+}
+
+/** @deprecated 검증 로그용 — jbexportRowExtractDetailIdMeta 와 동일 의미 */
+function jbexportRowExtractIdxMeta(row) {
+  const m = jbexportRowExtractDetailIdMeta(row);
+  return {
+    idx: m.value,
+    fieldName: m.fieldName,
+    rowKeys: m.rowKeys,
+  };
+}
+
+function jbexportRowExtractIdx(row) {
+  const m = jbexportRowExtractDetailIdMeta(row);
+  return m.value != null ? m.value : null;
+}
+
+function jbexportParseWork1SearchJson(json) {
+  const detailItems = [];
+  let totalHint = null;
+  if (!json || typeof json !== 'object') return { detailItems, totalHint };
+  totalHint = json.recordsTotal ?? json.recordsFiltered ?? json.total ?? null;
+  const rows = json.data ?? json.aaData ?? json.rows ?? [];
+  if (!Array.isArray(rows)) return { detailItems, totalHint };
+  for (const row of rows) {
+    const meta = jbexportRowExtractDetailIdMeta(row);
+    if (meta.value != null && String(meta.value).trim() !== '') detailItems.push(meta);
+  }
+  return { detailItems, totalHint };
+}
+
+/** 현재 페이지가 file:// 인지 등 (jbexport fetch 진단용) */
+function jbexportDescribePageContext() {
+  try {
+    const p = window.location?.protocol || '';
+    return {
+      protocol: p,
+      isFile: p === 'file:',
+      isSecureContext: typeof window.isSecureContext === 'boolean' ? window.isSecureContext : null,
+      href: String(window.location?.href || '').slice(0, 300),
+    };
+  } catch (_) {
+    return { protocol: '(unknown)', isFile: false, isSecureContext: null, href: '' };
+  }
+}
+
+/**
+ * fetch 실패 시 단일 태그로 분류 (브라우저는 CORS·네트워크를 동일 메시지로 줄 때가 많음)
+ * @returns {'[CORS]'|'[NETWORK]'|'[BAD_URL]'|'[BAD_BODY]'}
+ */
+function jbexportClassifyFetchFailure(err, urlString) {
+  const msg = String(err?.message || err || '');
+  const name = String(err?.name || '');
+  if (/^\[BAD_URL\]/i.test(msg) || /invalid url|malformed/i.test(msg)) return '[BAD_URL]';
+  if (/^\[BAD_BODY\]/i.test(msg) || /BAD_BODY/i.test(msg)) return '[BAD_BODY]';
+
+  try {
+    if (!urlString || !String(urlString).trim()) return '[BAD_URL]';
+    void new URL(urlString);
+  } catch {
+    return '[BAD_URL]';
+  }
+
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return '[NETWORK]';
+  if (name === 'AbortError' || /aborted|timeout/i.test(msg)) return '[NETWORK]';
+
+  let pageUrl;
+  try {
+    pageUrl = window.location?.href ? new URL(window.location.href) : null;
+  } catch {
+    pageUrl = null;
+  }
+  let targetUrl;
+  try {
+    targetUrl = new URL(urlString);
+  } catch {
+    return '[BAD_URL]';
+  }
+
+  if (pageUrl && pageUrl.protocol === 'https:' && targetUrl.protocol === 'http:') {
+    return '[NETWORK]';
+  }
+
+  const isFile = window.location?.protocol === 'file:';
+  const isTypeFailed =
+    name === 'TypeError' || /failed to fetch|load failed|networkerror|network error/i.test(msg);
+
+  const crossOrigin =
+    pageUrl != null && pageUrl.origin !== targetUrl.origin;
+
+  /* file:// 또는 (localhost 등 다른 origin → 외부 API) 에서 Failed to fetch 는 CORS 차단인 경우가 많음 */
+  if (isTypeFailed && isFile) return '[CORS]';
+  if (
+    isTypeFailed &&
+    crossOrigin &&
+    typeof navigator !== 'undefined' &&
+    navigator.onLine !== false
+  ) {
+    return '[CORS]';
+  }
+  if (isTypeFailed) return '[NETWORK]';
+
+  return '[NETWORK]';
+}
+
+/**
+ * 프록시 기동 여부(연결 거부 vs 목록 POST만 실패 구분). Failed to fetch 진단용.
+ * @returns {{ ok: boolean, status?: number, json?: object, error?: string }}
+ */
+async function jbexportFetchProxyHealth(appendLog) {
+  const url = `${JBEXPORT_PROXY_ORIGIN}/health`;
+  try {
+    const res = await fetchWithTimeout(
+      url,
+      { method: 'GET', headers: { Accept: 'application/json' } },
+      8000
+    );
+    const text = await res.text();
+    let j = null;
+    try {
+      j = JSON.parse(text);
+    } catch (_) {
+      /* ignore */
+    }
+    const ok = res.ok;
+    // #region agent log
+    __debugIngest15fb3d({
+      location: 'jbexportFetchProxyHealth',
+      message: 'proxy /health',
+      data: {
+        ok,
+        status: res.status,
+        build: j && j.build,
+        proxyOrigin: JBEXPORT_PROXY_ORIGIN,
+      },
+      hypothesisId: 'H1',
+    });
+    // #endregion
+    if (typeof appendLog === 'function') {
+      appendLog(
+        `  [jbexport][프록시] /health HTTP ${res.status} · build=${(j && j.build) || '(n/a)'} · ok=${ok}`,
+        ok ? 'ok' : 'warn'
+      );
+    }
+    try {
+      window.__JBEXPORT_LAST_PROXY_HEALTH = { ok, status: res.status, json: j };
+    } catch (_) {
+      /* ignore */
+    }
+    return { ok, status: res.status, json: j };
+  } catch (e) {
+    const msg = String(e?.message || e);
+    try {
+      window.__JBEXPORT_LAST_PROXY_HEALTH = { ok: false, error: msg };
+    } catch (_) {
+      /* ignore */
+    }
+    // #region agent log
+    __debugIngest15fb3d({
+      location: 'jbexportFetchProxyHealth',
+      message: 'proxy /health exception',
+      data: {
+        error: msg,
+        name: String(e?.name || ''),
+        proxyOrigin: JBEXPORT_PROXY_ORIGIN,
+      },
+      hypothesisId: 'H1',
+    });
+    // #endregion
+    if (typeof appendLog === 'function') {
+      appendLog(`  [jbexport][프록시] /health 연결 실패: ${msg}`, 'warn');
+      appendLog(
+        '  [안내] 터미널에서 프로젝트 폴더에서 `python jbexport_proxy.py` 실행 후, 브라우저 주소창에 http://127.0.0.1:5000/health 가 열리는지 확인하세요.',
+        'warn'
+      );
+    }
+    return { ok: false, error: msg };
+  }
+}
+
+/**
+ * Flask jbexport_proxy.py → /api/jbexport/list (브라우저는 동일 출처로만 통신)
+ */
+async function jbexportPostGetWork1SearchViaProxy({
+  start,
+  length,
+  menuUUID,
+  draw,
+  searchKeyword,
+  extraParams,
+  refererUrl,
+  appendLog,
+}) {
+  const proxyUrl = `${JBEXPORT_PROXY_ORIGIN}/api/jbexport/list`;
+  const effectiveLength = JBEXPORT_PROXY_LIST_LENGTH;
+  const payload = {
+    start,
+    length: effectiveLength,
+    draw,
+    work_year: '2026',
+    tsGubun: '',
+    menuUUID: menuUUID || '',
+    searchKeyword:
+      searchKeyword != null && searchKeyword !== undefined ? String(searchKeyword) : '',
+    'search[regex]': 'false',
+    columns: [
+      { data: '0' },
+      { data: 'CODE_K' },
+      { data: 'CATEGO' },
+      { data: 'js_title' },
+      { data: 'STS_TXT' },
+    ],
+    refererUrl: refererUrl || '',
+    extraParams: extraParams && typeof extraParams === 'object' ? extraParams : {},
+  };
+  if (typeof appendLog === 'function') {
+    appendLog(`  [jbexport][프록시] POST ${proxyUrl}`, 'info');
+    appendLog(`  [jbexport][프록시] payload=${JSON.stringify(payload)}`, 'info');
+  }
+  let res;
+  try {
+    res = await fetchWithTimeout(
+      proxyUrl,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload),
+      },
+      FETCH_EXTRACT_TIMEOUT_MS
+    );
+  } catch (err) {
+    const ctx = jbexportDescribePageContext();
+    const tag = jbexportClassifyFetchFailure(err, proxyUrl);
+    // #region agent log
+    __debugIngest15fb3d({
+      location: 'jbexportPostGetWork1SearchViaProxy',
+      message: 'proxy list fetch threw',
+      data: {
+        error: String(err?.message || err),
+        name: String(err?.name || ''),
+        tag,
+        protocol: ctx.protocol,
+        isFile: ctx.isFile,
+        isSecureContext: ctx.isSecureContext,
+        href: ctx.href,
+        proxyUrl,
+        hypothesisNote:
+          tag === '[CORS]' && ctx.isSecureContext
+            ? 'HTTPS 페이지에서 HTTP localhost 차단 가능(혼합 콘텐츠)'
+            : '연결 거부면 프록시 미기동·방화벽',
+      },
+      hypothesisId: 'H2',
+    });
+    // #endregion
+    if (typeof appendLog === 'function') {
+      appendLog(`  [jbexport][프록시][실패상세] ${tag} ${String(err?.message || err)}`, 'warn');
+      appendLog(
+        `  [jbexport][환경] protocol=${ctx.protocol} · secureContext=${ctx.isSecureContext} · file=${ctx.isFile ? 'yes' : 'no'}`,
+        'info'
+      );
+      try {
+        const h = window.__JBEXPORT_LAST_PROXY_HEALTH;
+        if (h && h.ok) {
+          appendLog(
+            '  [jbexport][진단] /health 는 성공했으나 목록 POST만 실패했습니다. 프록시 로그·방화벽·요청 본문 크기를 확인하세요.',
+            'warn'
+          );
+        } else if (ctx.isFile && tag === '[CORS]') {
+          appendLog(
+            '  [jbexport][진단] file:// 에서는 Failed to fetch 가 [CORS]로 표시되기도 하며, 실제로는 `python jbexport_proxy.py` 미실행(연결 거부)인 경우가 많습니다. 위 /health 줄을 확인하세요.',
+            'warn'
+          );
+        }
+      } catch (_) {
+        /* ignore */
+      }
+    }
+    throw err;
+  }
+  const rawText = await res.text();
+  let json;
+  try {
+    json = JSON.parse(rawText);
+  } catch (_) {
+    throw new Error(`jbexport proxy 응답 JSON 파싱 실패: ${rawText.slice(0, 200)}`);
+  }
+  if (!res.ok) {
+    const msg = json && (json.message || json.error || json.body) ? JSON.stringify(json) : rawText;
+    throw new Error(`jbexport proxy HTTP ${res.status} ${String(msg).slice(0, 400)}`);
+  }
+  if (json && json.error) {
+    throw new Error(`jbexport proxy: ${json.error} ${json.message || ''}`);
+  }
+  if (typeof appendLog === 'function' && json && typeof json === 'object') {
+    appendLog(`  [jbexport][프록시응답] keys=${Object.keys(json).slice(0, 20).join(', ') || '(none)'}`, 'info');
+  }
+  if (typeof appendLog === 'function' && json && typeof json === 'object' && json._proxy_debug) {
+    appendLog(`  [jbexport][프록시응답] _proxy_debug=${JSON.stringify(json._proxy_debug)}`, 'info');
+  }
+  const totalCount = jbexportParseListTotalCount(json);
+  const rows = jbexportListJsonRowsArray(json);
+  if (typeof appendLog === 'function' && (totalCount == null || totalCount === 0) && Array.isArray(rows) && rows.length === 0) {
+    appendLog(
+      '  [jbexport][WARN] 프록시 응답이 0건입니다. 프록시 재시작 후 /health 의 build/session_verify 확인 또는 _proxy_debug 존재 여부를 확인하세요.',
+      'warn'
+    );
+  }
+  __debugIngest15fb3d({
+    location: 'jbexportPostGetWork1Search',
+    message: 'getWork1Search OK (proxy)',
+    data: {
+      start,
+      length: effectiveLength,
+      draw,
+      recordsTotal: totalCount,
+      rowsLen: Array.isArray(rows) ? rows.length : null,
+      viaProxy: true,
+    },
+    hypothesisId: 'E',
+  });
+  return json;
+}
+
+/**
+ * POST getWork1Search (DataTables: start, length)
+ * 실제 jbexport 서버와 동일한 폼 형식 + Referer(목록 view 페이지)
+ * extraParams: 서버가 요구하는 추가 키(검색·컬럼 등)를 map.jbexportListExtraParams 로 확장
+ * appendLog: 있으면 요청 URL·body·헤더 및 fetch 실패 시 분류 로그
+ */
+async function jbexportPostGetWork1Search(
+  apiUrl,
+  { start, length, menuUUID, draw, searchKeyword, extraParams, refererUrl, appendLog }
+) {
+  if (typeof JBEXPORT_USE_PROXY !== 'undefined' && JBEXPORT_USE_PROXY && JBEXPORT_PROXY_ORIGIN) {
+    return jbexportPostGetWork1SearchViaProxy({
+      start,
+      length,
+      menuUUID,
+      draw,
+      searchKeyword,
+      extraParams,
+      refererUrl,
+      appendLog,
+    });
+  }
+
+  let bodyStr;
+  try {
+    const body = new URLSearchParams();
+    body.set('draw', String(draw));
+    body.set('start', String(start));
+    body.set('length', String(length));
+    if (menuUUID) body.set('menuUUID', menuUUID);
+    body.set('searchKeyword', searchKeyword != null && searchKeyword !== undefined ? String(searchKeyword) : '');
+    body.set('search[value]', '');
+    body.set('search[regex]', 'false');
+    if (extraParams && typeof extraParams === 'object') {
+      for (const [k, v] of Object.entries(extraParams)) {
+        if (v == null) continue;
+        body.set(k, String(v));
+      }
+    }
+    bodyStr = body.toString();
+  } catch (e) {
+    const tag = '[BAD_BODY]';
+    if (typeof appendLog === 'function') {
+      appendLog(`  ${tag} getWork1Search 요청 body 생성 실패`, 'warn');
+      appendLog(`  [jbexport][실패상세] ${String(e?.message || e)}`, 'warn');
+    }
+    throw new Error(`${tag} ${String(e?.message || e)}`);
+  }
+
+  const urlFinal = String(apiUrl || '').trim();
+  try {
+    void new URL(urlFinal);
+  } catch (e) {
+    const tag = '[BAD_URL]';
+    if (typeof appendLog === 'function') {
+      appendLog(`  ${tag} getWork1Search API URL이 올바르지 않음: ${urlFinal}`, 'warn');
+      appendLog(`  [jbexport][실패상세] ${String(e?.message || e)}`, 'warn');
+    }
+    throw new Error(`${tag} invalid URL: ${urlFinal}`);
+  }
+
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'X-Requested-With': 'XMLHttpRequest',
+  };
+  if (refererUrl) {
+    try {
+      headers['Referer'] = String(refererUrl);
+    } catch (_) {
+      /* ignore */
+    }
+  }
+  const headersForLog = { ...headers };
+
+  const ctx = jbexportDescribePageContext();
+  if (typeof appendLog === 'function') {
+    appendLog('  [jbexport][요청] method=POST', 'info');
+    appendLog(`  [jbexport][요청] url=${urlFinal}`, 'info');
+    appendLog(`  [jbexport][요청] body=${bodyStr}`, 'info');
+    appendLog(`  [jbexport][요청] headers=${JSON.stringify(headersForLog)}`, 'info');
+    appendLog(
+      `  [jbexport][환경] protocol=${ctx.protocol} · file프로토콜=${ctx.isFile ? 'yes' : 'no'} · href=${ctx.href || '(n/a)'}`,
+      'info'
+    );
+  }
+
+  let res;
+  try {
+    res = await fetchWithTimeout(
+      urlFinal,
+      {
+        method: 'POST',
+        headers,
+        body: bodyStr,
+      },
+      FETCH_EXTRACT_TIMEOUT_MS
+    );
+  } catch (err) {
+    const tag = jbexportClassifyFetchFailure(err, urlFinal);
+    if (typeof appendLog === 'function') {
+      appendLog(`  ${tag} getWork1Search fetch 실패`, 'warn');
+      appendLog(`  [jbexport][실패상세] 분류=${tag} (CORS·네트워크는 브라우저가 동일 메시지로 줄 수 있음)`, 'warn');
+      appendLog(`  [jbexport][실패상세] name=${String(err?.name || '')} message=${String(err?.message || err)}`, 'warn');
+      appendLog(`  [jbexport][실패상세] method=POST url=${urlFinal}`, 'warn');
+      appendLog(`  [jbexport][실패상세] body=${bodyStr}`, 'warn');
+      appendLog(`  [jbexport][실패상세] headers=${JSON.stringify(headersForLog)}`, 'warn');
+      appendLog(
+        `  [jbexport][실패상세] protocol=${ctx.protocol} file프로토콜=${ctx.isFile ? 'yes' : 'no'} navigator.onLine=${typeof navigator !== 'undefined' ? navigator.onLine : 'n/a'}`,
+        'warn'
+      );
+      if (tag === '[CORS]') {
+        let apiOrigin = '';
+        try {
+          apiOrigin = new URL(urlFinal).origin;
+        } catch (_) {
+          apiOrigin = '';
+        }
+        if (ctx.isFile) {
+          appendLog(
+            '  [jbexport][안내] [CORS] file:// 은 origin 이 없어 대부분 막힙니다. 아래처럼 http://localhost 로 여세요.',
+            'warn'
+          );
+          appendLog(
+            '  [jbexport][안내] 예: npx --yes serve .  →  http://localhost:3000/preview_demo_v4_copy.html',
+            'warn'
+          );
+          appendLog(
+            '  [jbexport][안내] 예: python -m http.server 8080  →  http://localhost:8080/preview_demo_v4_copy.html',
+            'warn'
+          );
+        } else {
+          appendLog(
+            `  [jbexport][안내] [CORS] 이 페이지 origin 과 API(${apiOrigin || 'getWork1Search.do'})가 다르면, 서버가 Access-Control-Allow-Origin 등을 주지 않을 때 브라우저가 POST 를 막아 Failed to fetch 로 보입니다.`,
+            'warn'
+          );
+          appendLog(
+            '  [jbexport][안내] localhost 로 열어도 jbexport.or.kr 이 CORS 를 허용하지 않으면 동일합니다. → 백엔드 프록시로 POST 대행, 또는 공식 사이트와 동일 출처에서만 제공되는 위젯/페이지 사용.',
+            'warn'
+          );
+        }
+      }
+      if (tag === '[NETWORK]') {
+        appendLog(
+          '  [jbexport][안내] [NETWORK] DNS·SSL·방화벽·오프라인·Mixed Content(https→http) 등을 확인하세요.',
+          'warn'
+        );
+      }
+    }
+    throw new Error(`${tag} ${String(err?.message || err)}`);
+  }
+
+  if (!res.ok) {
+    const t = await res.text().catch(() => '');
+    throw new Error(`getWork1Search HTTP ${res.status} ${t.slice(0, 200)}`);
+  }
+  const ct = (res.headers.get('content-type') || '').toLowerCase();
+  if (!ct.includes('json')) {
+    const t = await res.text();
+    throw new Error(`getWork1Search 응답이 JSON이 아님: ${t.slice(0, 200)}`);
+  }
+  const json = await res.json();
+  __debugIngest15fb3d({
+    location: 'jbexportPostGetWork1Search',
+    message: 'getWork1Search OK',
+    data: { start, length, draw, recordsTotal: json?.recordsTotal ?? json?.recordsFiltered },
+    hypothesisId: 'E',
+  });
+  return json;
+}
+
+/** jbexport 상세 레코드 빈 값(추출 실패·예외 시) */
+function jbexportEmptyDetailRecord(detailUrl, spSeq) {
+  return {
+    spSeq: String(spSeq ?? ''),
+    title: '',
+    status: '',
+    period: '',
+    description: '',
+    target: '',
+    organization: '',
+    bodyText: '',
+    attachments: '',
+    detailUrl: String(detailUrl || ''),
+    mainSelector: null,
+  };
+}
+
+/**
+ * 상세 HTML에서 필드 추출 → 저장용 레코드
+ * 저장 행: [제목, 상태, 접수기간, 본문, 첨부(URL | 구분), 상세URL]
+ * extractItemFromPage 가 null 이어도 예외 없이 빈 필드로 채움
+ */
+function jbexportExtractDetailRecord(detailUrl, html, text) {
+  try {
+    const rawItem = extractItemFromPage(detailUrl, html, text);
+    const item = rawItem || {};
+    const combined = `${text || ''}\n${html || ''}`;
+    let period = extractJbexportReceiptPeriod(combined);
+    if (period == null || period === '—') period = '';
+
+    let bodyPack;
+    try {
+      bodyPack = jbexportPlainBodyFull(html, text, 500000);
+    } catch (_) {
+      bodyPack = { text: '', truncated: false, totalLen: 0, mainSelector: null };
+    }
+    let bodyText = bodyPack.text != null ? String(bodyPack.text) : '';
+    let structured = {
+      상세URL: String(detailUrl || ''),
+      지원내용: '',
+      신청방법: '',
+      지원규모: '',
+      첨부파일: [],
+    };
+    try {
+      structured = jbexportExtractDetailStructured(detailUrl, html, text);
+    } catch (_) {
+      /* ignore */
+    }
+
+    let hrefs = [];
+    try {
+      hrefs = jbexportListAttachmentHrefs(html, text);
+    } catch (_) {
+      hrefs = [];
+    }
+    let attachments = hrefs.length ? hrefs.join('|') : '';
+    if (Array.isArray(structured.첨부파일) && structured.첨부파일.length > 0) {
+      attachments = structured.첨부파일.join('|');
+    }
+    if (
+      String(structured.지원내용 || '').trim() &&
+      !jbexportLooksLikeMetaNoise(structured.지원내용 || '') &&
+      !jbexportLooksLikeTemplateNoise(structured.지원내용 || '')
+    ) {
+      bodyText = String(structured.지원내용 || '').trim();
+    }
+
+    let status = String(item.status ?? '').trim();
+    if (/접수마감|접수\s*마감|모집종료|신청\s*마감|마감(?!.*접수중)/i.test(combined)) {
+      status = '접수마감';
+    } else if (/접수중|접수\s*중|신청\s*중/i.test(combined)) {
+      status = '접수중';
+    }
+
+    let title = String(item.title ?? '').trim();
+    const target = String(item.summary?.target ?? '').trim();
+    const organization = String(item.agency ?? '').trim() || '전북수출통합지원시스템';
+    let structuredSupport = String(structured.지원내용 || '').trim();
+    if (
+      jbexportLooksLikeLabelOnly(structuredSupport) ||
+      jbexportLooksLikeMetaNoise(structuredSupport) ||
+      jbexportLooksLikeTemplateNoise(structuredSupport)
+    ) structuredSupport = '';
+    const summaryContent = String(item.summary?.content ?? '').trim();
+    const safeSummaryContent =
+      jbexportLooksLikeTemplateNoise(summaryContent) || jbexportLooksLikeMetaNoise(summaryContent)
+        ? ''
+        : summaryContent;
+    const description = structuredSupport || safeSummaryContent || bodyText;
+    // #region agent log
+    __debugIngest15fb3d({
+      location: 'jbexportExtractDetailRecord',
+      message: 'detail description source',
+      data: {
+        detailUrl: String(detailUrl || ''),
+        structuredSupportLen: structuredSupport.length,
+        summaryContentLen: summaryContent.length,
+        summaryNoise: jbexportLooksLikeTemplateNoise(summaryContent),
+        bodyTextLen: String(bodyText || '').length,
+        used: structuredSupport ? 'structured' : safeSummaryContent ? 'summary' : 'bodyText',
+      },
+      hypothesisId: 'H6',
+    });
+    // #endregion
+
+    return {
+      spSeq: '',
+      title,
+      status,
+      period,
+      description,
+      target,
+      organization,
+      bodyText,
+      attachments,
+      detailUrl,
+      mainSelector: bodyPack.mainSelector || null,
+      supportContent: String(structured.지원내용 || ''),
+      applyMethod: String(structured.신청방법 || ''),
+      supportScale: String(structured.지원규모 || ''),
+    };
+  } catch (_) {
+    return jbexportEmptyDetailRecord(detailUrl, '');
+  }
+}
+
+/** 화면 테이블·모달용 행 (실제 API 수집 결과만 반영) */
+function jbexportRecordToTableRow(rec) {
+  const spSeq = String(rec.spSeq ?? '');
+  const title = String(rec.title ?? '');
+  const status = String(rec.status ?? '');
+  const period = String(rec.period ?? '');
+  const description = String(rec.description ?? rec.bodyText ?? '');
+  const target = String(rec.target ?? '');
+  const organization = String(rec.organization ?? '전북수출통합지원시스템');
+  const bodyText = String(rec.bodyText ?? '');
+  const attachments = String(rec.attachments ?? '');
+  const detailUrl = String(rec.detailUrl ?? '');
+  const applyMethod = String(rec.applyMethod ?? '');
+  const supportScale = String(rec.supportScale ?? '');
+  return {
+    spSeq,
+    title,
+    agency: organization,
+    status,
+    period,
+    description,
+    target,
+    organization,
+    detailUrl,
+    jbexportBody: bodyText,
+    jbexportAttachments: attachments,
+    jbexportRow: [spSeq, title, description, target, period, organization, detailUrl],
+    isNew: true,
+    summary: {
+      target: target || '—',
+      content: description.length > 2000 ? `${description.slice(0, 2000)}…` : description,
+      howto: applyMethod || detailUrl,
+      amount: supportScale || attachments,
+    },
+  };
+}
+
+/** 테스트 모드에서만 상세 로그(저장 행 형식) */
+function jbexportLogPipelineRecord(rec, appendLog) {
+  appendLog(`  [jbexport] ── 저장 행 [spSeq, 제목, 상태, 접수기간, 본문, 첨부, 상세URL] ──`, 'head');
+  const bt = String(rec.bodyText ?? '');
+  appendLog(`  [jbexport] spSeq: ${String(rec.spSeq ?? '')}`, 'info');
+  appendLog(`  [jbexport] 제목: ${rec.title}`, 'info');
+  appendLog(`  [jbexport] 상태: ${rec.status}`, 'info');
+  appendLog(`  [jbexport] 접수기간: ${rec.period}`, 'info');
+  appendLog(
+    `  [jbexport] 본문(태그제거, 길이 ${bt.length}자): ${bt.slice(0, 1200)}${bt.length > 1200 ? '…' : ''}`,
+    'info'
+  );
+  appendLog(`  [jbexport] 첨부파일 링크: ${String(rec.attachments ?? '')}`, 'info');
+  appendLog(`  [jbexport] 상세 URL: ${rec.detailUrl}`, 'ok');
+  if (rec.mainSelector) appendLog(`  [jbexport] 본문 영역 선택자: ${rec.mainSelector}`, 'info');
+}
+
+/** CSV 필드 이스케이프 (RFC 4180) */
+function jbexportCsvEscapeField(val) {
+  const s = String(val ?? '');
+  if (/[",\r\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+  return s;
+}
+
+/** jbexport 행 배열 → CSV 문자열 (BOM 포함, Excel 호환) */
+function jbexportBuildCsv(rows) {
+  const headers = [
+    'spSeq',
+    'title',
+    'description',
+    'target',
+    'period',
+    'organization',
+    'detail_url',
+  ];
+  const lines = [headers.join(',')];
+  for (const row of rows) {
+    lines.push(headers.map((h) => jbexportCsvEscapeField(row[h])).join(','));
+  }
+  return '\uFEFF' + lines.join('\r\n');
+}
+
+/** 브라우저에서 jbexport_list.csv 다운로드 (Blob URL은 즉시 revoke 하지 않음 — 다운로드 취소 방지) */
+function jbexportDownloadCsv(rows, filename) {
+  const name = filename || 'jbexport_list.csv';
+  const blob = new Blob([jbexportBuildCsv(rows)], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  window.__JBEXPORT_LAST_CSV_URL = url;
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => {
+    try {
+      URL.revokeObjectURL(url);
+    } catch (_) {
+      /* ignore */
+    }
+    if (window.__JBEXPORT_LAST_CSV_URL === url) window.__JBEXPORT_LAST_CSV_URL = null;
+  }, 2500);
+}
+window.jbexportDownloadCsv = jbexportDownloadCsv;
+
+/**
+ * jbexport 수집 파이프라인 (단일 진입점)
+ * @returns {Array<{spSeq,title,status,period,bodyText,attachments,detailUrl}>}
+ */
+async function jbexportExecutePipeline(src, appendLog) {
+  const paths = jbexportPathsFromListUrl(src.listUrl);
+  const length = JBEXPORT_USE_PROXY
+    ? JBEXPORT_PROXY_LIST_LENGTH
+    : Number.isFinite(src.dtLength) && src.dtLength > 0 ? Math.floor(src.dtLength) : DEFAULT_PAGE_SIZE;
+  try {
+    window.__JBEXPORT_LIST_FAILED = false;
+  } catch (_) {
+    /* ignore */
+  }
+  __debugIngest15fb3d({
+    location: 'jbexportExecutePipeline',
+    message: 'pipeline start',
+    data: { length, dtLength: src.dtLength, build: JBEXPORT_PIPELINE_BUILD },
+    hypothesisId: 'A',
+  });
+  appendLog(`  [jbexport] build=${JBEXPORT_PIPELINE_BUILD} (로그에 없으면 HTML 구버전·캐시)`, 'info');
+  if (JBEXPORT_USE_PROXY && JBEXPORT_PROXY_ORIGIN) {
+    appendLog(
+      `  [jbexport] 프록시 모드: ${JBEXPORT_PROXY_ORIGIN} (터미널: python jbexport_proxy.py)`,
+      'head'
+    );
+    await jbexportFetchProxyHealth(appendLog);
+  }
+  const testMode = src.jbexportTestMode === true;
+  const maxListPages =
+    Number.isFinite(src.listPagesMax) && src.listPagesMax > 0 ? Math.floor(src.listPagesMax) : 500;
+
+  const runList = (start, draw) =>
+    jbexportPostGetWork1Search(paths.getWork1Search, {
+      start,
+      length,
+      menuUUID: paths.menuUUID,
+      draw,
+      searchKeyword: src.searchKeyword,
+      extraParams: src.jbexportListExtraParams,
+      refererUrl: src.listUrl,
+      appendLog,
+    });
+
+  const fetchOneDetail = async (detailUrl, spSeq) => {
+    try {
+      let page;
+      if (typeof JBEXPORT_USE_PROXY !== 'undefined' && JBEXPORT_USE_PROXY && JBEXPORT_PROXY_ORIGIN) {
+        const u = new URL(detailUrl);
+        const sp = (u.searchParams.get('spSeq') || String(spSeq ?? '')).trim();
+        const mu = (u.searchParams.get('menuUUID') || paths.menuUUID || '').trim();
+        const q = new URLSearchParams();
+        q.set('spSeq', sp);
+        if (mu) q.set('menuUUID', mu);
+        if (src.listUrl) q.set('refererUrl', src.listUrl);
+        const purl = `${JBEXPORT_PROXY_ORIGIN}/api/jbexport/detail?${q.toString()}`;
+        appendLog(`  [jbexport][프록시] GET detail (spSeq=${sp})`, 'info');
+        const res = await fetchWithTimeout(purl, { method: 'GET' }, FETCH_EXTRACT_TIMEOUT_MS);
+        if (!res.ok) {
+          const t = await res.text().catch(() => '');
+          throw new Error(`jbexport proxy detail HTTP ${res.status} ${t.slice(0, 200)}`);
+        }
+        const html = await res.text();
+        page = { html, text: html };
+      } else {
+        page = await fetchPageForExtract(detailUrl);
+      }
+      const base = jbexportExtractDetailRecord(detailUrl, page.html, page.text);
+      return { ...base, spSeq: String(spSeq ?? '') };
+    } catch (_) {
+      return jbexportEmptyDetailRecord(detailUrl, spSeq);
+    }
+  };
+
+  const records = [];
+  const seenSpSeq = new Set();
+
+  const storeRowArrays = () => {
+    window.__JBEXPORT_LAST_ROWS = records.map((r) => ({
+      spSeq: String(r.spSeq ?? ''),
+      title: String(r.title ?? ''),
+      description: String(r.description ?? r.bodyText ?? ''),
+      target: String(r.target ?? ''),
+      period: String(r.period ?? ''),
+      organization: String(r.organization ?? ''),
+      detail_url: String(r.detailUrl ?? ''),
+    }));
+  };
+
+  if (testMode) {
+    appendLog(`  [jbexport][테스트] POST getWork1Search start=0, length=${length}`, 'head');
+    let json;
+    try {
+      json = await runList(0, 1);
+    } catch (e) {
+      appendLog(`  [jbexport] 목록 오류: ${String(e?.message || e)}`, 'warn');
+      appendLog('  [안내] 원인은 위 [jbexport][실패상세]·[CORS]/[NETWORK] 로그를 확인하세요. file:// 이면 localhost 정적 서버 사용.', 'warn');
+      try {
+        window.__JBEXPORT_LIST_FAILED = true;
+      } catch (_) {
+        /* ignore */
+      }
+      __debugIngest15fb3d({
+        location: 'jbexportExecutePipeline',
+        message: 'getWork1Search failure (test mode)',
+        data: { error: String(e?.message || e) },
+        hypothesisId: 'E',
+      });
+      appendLog('  [단계] [jbexport] ④ 목록 API 실패 — window.__JBEXPORT_LAST_ROWS 비움 · CSV 없음', 'warn');
+      window.__JBEXPORT_LAST_ROWS = [];
+      return [];
+    }
+    appendLog('[목록] 페이지 1 수집 중...', 'info');
+    const totalHint = json?.recordsTotal ?? json?.recordsFiltered ?? json?.total;
+    if (totalHint != null) appendLog(`  [jbexport] recordsTotal: ${totalHint}`, 'info');
+    const spSeqs = jbexportExtractSpSeqListFromJson(json);
+    appendLog(`[목록] ${spSeqs.length}건 수집`, 'info');
+    appendLog(`  [jbexport] spSeq 리스트: ${spSeqs.join(', ') || '(없음)'}`, spSeqs.length ? 'info' : 'warn');
+    if (spSeqs.length === 0) {
+      window.__JBEXPORT_LAST_ROWS = [];
+      return [];
+    }
+    const sq0 = spSeqs[0];
+    const detailUrl = jbexportBuildSpSeqDetailUrl(paths, sq0);
+    appendLog('[상세] 1/1 처리중...', 'info');
+    appendLog(`  [jbexport] 상세 1건만: ${detailUrl}`, 'ok');
+    const rec = await fetchOneDetail(detailUrl, sq0);
+    if (!String(rec.bodyText || '').trim()) {
+      appendLog(`[WARN] 본문 없음: ${detailUrl}`, 'warn');
+    }
+    records.push(rec);
+    appendLog('[상세] 완료', 'ok');
+    jbexportLogPipelineRecord(rec, appendLog);
+    storeRowArrays();
+    appendLog('  [jbexport] 테스트 완료. 전체 수집은 jbexportTestMode: false', 'warn');
+    return records;
+  }
+
+  appendLog(`  [jbexport][전체] length=${length}, 최대 목록 페이지 ${maxListPages}회 (종료: 빈 목록·마지막 미만 페이지·상한)`, 'head');
+  appendLog(
+    `  [단계] [jbexport] ① POST getWork1Search.do · length=${length} · spSeq→detail1.do`,
+    'head'
+  );
+
+  let start = 0;
+  let draw = 1;
+  let pageNum = 0;
+  /** 목록 POST(fetch)가 예외로 끊긴 경우 — ④를 ‘완료’가 아닌 ‘중단’으로 표시 */
+  let listFetchFailed = false;
+  /** 마지막 목록 응답의 원본 행 개수(페이지네이션 종료 판단용 — spSeq 추출 개수와 무관) */
+  let lastListRowCount = 0;
+
+  while (true) {
+    if (pageNum >= maxListPages) {
+      appendLog(`  [jbexport] 목록 페이지 상한 ${maxListPages}회 도달 → 중단`, 'warn');
+      break;
+    }
+    pageNum++;
+    appendLog(`[jbexport] page ${pageNum} (start=${start})`, 'head');
+
+    let json;
+    try {
+      json = await runList(start, draw);
+    } catch (e) {
+      appendLog(`[목록] 오류: ${String(e?.message || e)}`, 'warn');
+      listFetchFailed = true;
+      try {
+        window.__JBEXPORT_LIST_FAILED = true;
+      } catch (_) {
+        /* ignore */
+      }
+      __debugIngest15fb3d({
+        location: 'jbexportExecutePipeline',
+        message: 'getWork1Search failure',
+        data: { error: String(e?.message || e), page: pageNum, start },
+        hypothesisId: 'E',
+      });
+      break;
+    }
+    draw++;
+
+    const listRows = jbexportListJsonRowsArray(json);
+    const rowCount = listRows.length;
+    lastListRowCount = rowCount;
+    const totalCount = jbexportParseListTotalCount(json);
+
+    appendLog(
+      `  [단계] [jbexport] ② 목록 JSON · 원본 행 ${rowCount}건 · start=${start} · length=${length}`,
+      'info'
+    );
+    if (totalCount != null && totalCount > 0) {
+      const estPages = length > 0 ? Math.max(1, Math.ceil(totalCount / length)) : 1;
+      appendLog(
+        `  [jbexport] recordsTotal=${totalCount} → 예상 페이지 수 ≈ ${estPages} (length=${length})`,
+        'info'
+      );
+    } else if (totalCount === 0) {
+      appendLog('  [jbexport] recordsTotal=0 (또는 미신뢰) → 행 수·length 기준으로만 종료 판단', 'warn');
+    } else {
+      appendLog('  [jbexport] recordsTotal 등 총건수 필드 없음 → 행 수·length 기준으로만 페이지 반복', 'warn');
+    }
+
+    if (rowCount === 0) {
+      appendLog('  [jbexport] 데이터 0건 → 종료', 'info');
+      break;
+    }
+
+    const spSeqs = jbexportExtractSpSeqListFromJson(json);
+    appendLog(`[목록] spSeq ${spSeqs.length}건 추출 (원본 행 ${rowCount}건)`, 'info');
+    if (spSeqs.length === 0 && rowCount > 0) {
+      appendLog(
+        '  [WARN] 행은 있으나 spSeq 추출 실패 — 셀에 detail1.do?spSeq= 형태가 있는지 확인하세요.',
+        'warn'
+      );
+    }
+
+    if (spSeqs.length > 0) {
+      appendLog(`  [상세] 최대 ${length}건`, 'info');
+      for (let i = 0; i < spSeqs.length; i++) {
+        const sq = spSeqs[i];
+        if (seenSpSeq.has(sq)) continue;
+        seenSpSeq.add(sq);
+
+        const detailUrl = jbexportBuildSpSeqDetailUrl(paths, sq);
+        appendLog(`  [상세] ${i + 1}/${length} 처리 중`, 'info');
+        appendLog(`  [단계] [jbexport] 상세 GET detail1.do · spSeq=${sq}`, 'info');
+        const rec = await fetchOneDetail(detailUrl, sq);
+        if (!String(rec.bodyText || '').trim()) {
+          appendLog(`[WARN] 본문 없음: ${detailUrl}`, 'warn');
+        }
+        records.push(rec);
+        appendLog('[상세] 완료', 'ok');
+      }
+    }
+
+    start += length;
+    appendLog(`  [단계] [jbexport] ③ 다음 start=${start}`, 'info');
+
+    if (rowCount < length) {
+      appendLog('  [jbexport] 이번 페이지 행 수 < length → 마지막 페이지 → 종료', 'info');
+      break;
+    }
+    if (totalCount != null && totalCount > 0 && start >= totalCount) {
+      appendLog(`  [jbexport] start(${start}) >= recordsTotal(${totalCount}) → 종료`, 'info');
+      break;
+    }
+  }
+
+  /* listFetchFailed 와 전역 플래그 둘 다 검사 (구버전·캐시로 분기 누락 방지) */
+  if (listFetchFailed || window.__JBEXPORT_LIST_FAILED === true) {
+    window.__JBEXPORT_LAST_ROWS = [];
+    appendLog(`  [단계] [jbexport] ④ 목록 API 실패 — window.__JBEXPORT_LAST_ROWS 비움 · CSV 저장 안 함`, 'warn');
+    appendLog(`  [jbexport] 수집 중단 (목록 fetch 실패)`, 'warn');
+    appendLog(
+      '  [jbexport] 위 [jbexport][실패상세]·[CORS]/[NETWORK] 로그와 [DEBUG:15fb3d](hypothesis E)를 함께 확인하세요.',
+      'warn'
+    );
+    return records;
+  }
+
+  if (pageNum >= maxListPages && lastListRowCount === length) {
+    appendLog(
+      `  [jbexport] 목록 페이지 상한 ${maxListPages}회 도달 (마지막 목록이 가득 차 추가 페이지가 있을 수 있음)`,
+      'warn'
+    );
+  }
+
+  storeRowArrays();
+  appendLog(`  [단계] [jbexport] ④ window.__JBEXPORT_LAST_ROWS ${records.length}건 · CSV 대기`, 'head');
+  appendLog(`  [jbexport] 전체 수집 완료: ${records.length}건 (고유 spSeq ${seenSpSeq.size})`, 'head');
+  return records;
+}
+
+// ===== 실제 수집(네트워크 fetch) =====
+async function runRealCollect() {
+  const logArea = document.getElementById('logArea');
+  if (!logArea) return;
+  logArea.innerHTML = '';
+  try {
+    window.__DEBUG_INGEST_BUFFER_15FB3D = [];
+  } catch (_) {
+    /* ignore */
+  }
+  try {
+    window.__JBEXPORT_LIST_FAILED = false;
+  } catch (_) {
+    /* ignore */
+  }
+
+  const appendLog = (text, cls) => {
+    const line = document.createElement('div');
+    line.className = cls;
+    line.textContent = text;
+    logArea.appendChild(line);
+    logArea.scrollTop = logArea.scrollHeight;
+  };
+
+  /** 이번 호출에서만 collecting 락을 잡았을 때 true — 조기 return(중복 실행)에서는 finally가 락/로그를 건드리지 않음 */
+  let collectLockAcquired = false;
+
+  try {
+    if (__state.collecting) {
+      appendLog('이미 수집이 진행 중입니다. 완료 후 다시 시도해주세요.', 'warn');
+      return;
+    }
+    __state.collecting = true;
+    collectLockAcquired = true;
+
+    appendLog('🚀 실제 수집 시작 (리스트→상세 파싱)', 'head');
+
+    const selectedListSources = getSelectedListSourcesFromUI();
+    const customDetailUrls = (customSources || []).map(s => s.url).filter(Boolean);
+
+    if ((!selectedListSources || selectedListSources.length === 0) && customDetailUrls.length === 0) {
+      appendLog('체크박스에서 수집 소스를 선택하거나, 사용자 정의 소스 URL을 입력한 뒤 다시 시도해주세요.', 'warn');
+      return;
+    }
+
+    const collected = [];
+
+    let stopAllOn429 = false;
+
+    // 1) 체크된 "리스트 소스" 처리(목록 페이지에서 상세 링크 뽑아 여러 건 추출)
+    for (const src of selectedListSources) {
+      appendLog(`▶ [${src.label}]`, 'head');
+      appendLog(`  [LIST] ${src.listUrl}`, 'info');
+      appendLog(
+        `  [상세] ${
+          Number.isFinite(src.maxDetail) ? `최대 ${src.maxDetail}건` : '전체(제한 없음)'
+        }`,
+        'info'
+      );
+      if (src.id === 'jbexport') {
+        const len =
+          Number.isFinite(src.dtLength) && src.dtLength > 0 ? Math.floor(src.dtLength) : DEFAULT_PAGE_SIZE;
+        appendLog(
+          `  [jbexport] detail1.do?spSeq · ${src.jbexportTestMode === true ? '테스트(상세1)' : '전체 수집+CSV'} · length=${len}`,
+          'info'
+        );
+        appendLog(
+          '  [단계] jbexport: POST getWork1Search.do → spSeq 추출 → GET detail1.do → start+=length 반복 → jbexport_list.csv',
+          'info'
+        );
+      }
+
+      try {
+        if (src.id === 'jbexport') {
+          const jbRecords = await jbexportExecutePipeline(src, appendLog);
+          for (const rec of jbRecords) {
+            collected.push(jbexportRecordToTableRow(rec));
+          }
+          const jbRows = window.__JBEXPORT_LAST_ROWS;
+          if (jbRows && jbRows.length > 0) {
+            jbexportDownloadCsv(jbRows, 'jbexport_list.csv');
+            appendLog('[완료] CSV 저장 완료 (jbexport_list.csv)', 'ok');
+            __debugIngest15fb3d({
+              location: 'runRealCollect',
+              message: 'jbexport CSV saved',
+              data: { rowCount: jbRows.length },
+              hypothesisId: 'C',
+            });
+          }
+          if (window.__JBEXPORT_LIST_FAILED) {
+            appendLog('  [jbexport] 테이블 반영 없음 (목록 API 실패 — window.__JBEXPORT_LAST_ROWS 비움)', 'warn');
+          } else {
+            appendLog(`  [jbexport] 테이블 반영: ${jbRecords.length}건 (window.__JBEXPORT_LAST_ROWS)`, 'ok');
+          }
+        } else {
+          appendLog('  [목록] 불러오는 중…', 'info');
+          let listPage;
+          let listFetchFailed = false;
+          if (src.id === 'jbtp') {
+            listPage = await fetchJbtpListPageDirect(src.listUrl, appendLog);
+            listFetchFailed = listPage.listFetchFailed === true;
+          } else {
+            listPage = await fetchPageForExtract(src.listUrl);
+          }
+          if (listFetchFailed) {
+            appendLog('  [단계] 목록 fetch 실패로 이 소스의 상세 수집을 건너뜁니다.', 'warn');
+            continue;
+          }
+          const detailUrls = extractDetailUrlsFromList(src.id, src.listUrl, listPage.text || '');
+          const limited = Number.isFinite(src.maxDetail)
+            ? detailUrls.slice(0, src.maxDetail)
+            : detailUrls.slice();
+
+          appendLog(`  [추출] 상세 링크 ${limited.length}건`, 'info');
+          if (src.id === 'jbok' && detailUrls.length === 0) {
+            appendLog(
+              '  [안내] jbok 목록에서 링크를 찾지 못했습니다. 필터·빈 목록·프록시 형식일 수 있습니다.',
+              'warn'
+            );
+          }
+
+          let stopThisSource = false;
+          for (let j = 0; j < limited.length; j++) {
+            const detailUrl = limited[j];
+            if (stopThisSource) break;
+            if (stopAllOn429) break;
+            try {
+              appendLog(`  - 상세 ${j + 1}/${limited.length}`, 'info');
+              const detailPage = await fetchPageForExtract(detailUrl);
+              const item = extractItemFromPage(detailUrl, detailPage.html, detailPage.text);
+              if (item) {
+                collected.push(item);
+                appendLog('    [완료]', 'ok');
+              } else {
+                appendLog('    [경고] 상세 파싱 실패: 제목·본문을 충분히 읽지 못했습니다.', 'warn');
+              }
+            } catch (err) {
+              const msg = String(err?.message || err);
+              appendLog(`    [오류] ${msg}`, 'warn');
+              if (msg.includes('Proxy HTTP 429')) {
+                stopThisSource = true;
+                stopAllOn429 = true;
+                appendLog('    [중단] Proxy HTTP 429 감지 → 남은 상세 요청 중단', 'warn');
+              }
+            }
+          }
+        }
+      } catch (err) {
+        appendLog(`  [리스트 오류] ${String(err?.message || err)}`, 'warn');
+      }
+
+      if (stopAllOn429) break;
+    }
+
+    // 2) 사용자 정의 소스는 "상세 URL"로 취급(1개 URL당 1건 추출)
+    if (customDetailUrls.length > 0) {
+      appendLog('▶ [사용자 정의 상세 URL] 처리', 'head');
+
+      for (let i = 0; i < customDetailUrls.length; i++) {
+        const url = customDetailUrls[i];
+        if (stopAllOn429) break;
+        appendLog(`  [URL ${i + 1}] ${url}`, 'info');
+        try {
+          const page = await fetchPageForExtract(url);
+          const item = extractItemFromPage(url, page.html, page.text);
+          if (item) {
+            collected.push(item);
+            appendLog('  [완료]', 'ok');
+          } else {
+            appendLog('  [경고] 상세 파싱 실패: 제목·본문을 충분히 읽지 못했습니다.', 'warn');
+          }
+        } catch (err) {
+          appendLog(`  [오류] ${String(err?.message || err)}`, 'warn');
+        }
+      }
+    }
+
+    if (collected.length === 0) {
+      if (window.__JBEXPORT_LIST_FAILED) {
+        appendLog(
+          'jbexport 목록 API(fetch) 실패로 결과가 없습니다. [목록] 오류·[jbexport][실패상세]·[DEBUG:15fb3d](E)를 확인하세요.',
+          'warn'
+        );
+        try {
+          window.__JBEXPORT_LIST_FAILED = false;
+        } catch (_) {
+          /* ignore */
+        }
+        return;
+      }
+      appendLog('추출된 결과가 없습니다.', 'warn');
+      return;
+    }
+
+    // 간단 중복 제거(제목+기관)
+    const uniq = [];
+    const seen = new Set();
+    for (const it of collected) {
+      const key = it.spSeq
+        ? `jbexport:${String(it.spSeq).trim()}`
+        : `${(it.title || '').trim()}|${(it.agency || '').trim()}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniq.push(it);
+      }
+    }
+
+    // 파이프라인 마지막 단계: “DB 저장”에 해당 — 브라우저 메모리 테이블(TABLE_ROWS) 갱신
+    TABLE_ROWS = uniq.map(d => ({ ...d, isNew: true }));
+    currentFilter = 'all';
+    currentFilteredData = TABLE_ROWS;
+
+    // KPI 업데이트
+    const allCount = TABLE_ROWS.length;
+    const newCount = TABLE_ROWS.filter(d => d.isNew).length;
+    const oldCount = allCount - newCount;
+
+    const kpiAllVal = document.querySelector('#kpi-all .kpi-val');
+    const kpiNewVal = document.querySelector('#kpi-new .kpi-val');
+    const kpiOldVal = document.querySelector('#kpi-old .kpi-val');
+    if (kpiAllVal) kpiAllVal.textContent = allCount;
+    if (kpiNewVal) kpiNewVal.textContent = newCount;
+    if (kpiOldVal) kpiOldVal.textContent = oldCount;
+
+    const deadlineCount = countDeadlineNear();
+    const deadlineCountEl = document.getElementById('deadlineCount');
+    if (deadlineCountEl) deadlineCountEl.textContent = deadlineCount;
+
+    filterData('all');
+    updateChartsFromTableRows();
+    updateLastCollectUi();
+    appendLog('✅ 실제 수집 완료 (테이블 갱신)', 'ok');
+  } catch (err) {
+    appendLog(`[치명 오류] ${String(err?.message || err)}`, 'warn');
+  } finally {
+    if (collectLockAcquired) {
+      try {
+        const buf = window.__DEBUG_INGEST_BUFFER_15FB3D;
+        if (buf && buf.length) {
+          const s = JSON.stringify(buf);
+          const clipped = s.length > 12000 ? `${s.slice(0, 12000)}…(truncated)` : s;
+          appendLog(`[DEBUG:15fb3d] 런타임 증거 ${buf.length}건: ${clipped}`, 'info');
+          void (async () => {
+            let savedByPicker = false;
+            try {
+              savedByPicker = await __debugSaveWithFilePicker15fb3d(buf);
+              if (savedByPicker) {
+                appendLog(
+                  '  [DEBUG] debug-15fb3d.log 저장 완료(저장 위치 선택) — Cursor에서 바로 분석 가능',
+                  'ok'
+                );
+              }
+            } catch (_) {
+              /* ignore */
+            }
+            if (!savedByPicker) {
+              __debugDownloadNdjson15fb3d(buf);
+              appendLog(
+                '  [DEBUG] debug-15fb3d.log 자동 다운로드됨 → 프로젝트 폴더로 옮기면 분석 가능',
+                'info'
+              );
+            }
+            const clipOk = await __debugCopyNdjson15fb3d(buf);
+            if (clipOk) {
+              appendLog(
+                '  [DEBUG] NDJSON 클립보드 복사됨 → debug-15fb3d.log 새 파일에 붙여넣기 가능',
+                'ok'
+              );
+            }
+            appendLog(
+              '  [DEBUG] 커서0321 폴더에 debug-15fb3d.log 저장 시 Cursor가 NDJSON 분석 가능. jbexport 목록 실패 시 hypothesisId E 줄이 있어야 정상(1건만·A만 있으면 HTML 구버전 또는 강력 새로고침 필요).',
+              'info'
+            );
+          })();
+        }
+      } catch (_) {
+        /* ignore */
+      }
+      __state.collecting = false;
+    }
+  }
+}
+
+function getSelectedListSourcesFromUI() {
+  // 체크된 항목(checkbox)에 대응되는 "리스트 URL"을 연결합니다.
+  // (사용자 입력 상세 URL은 customSources에 별도 저장됨)
+  const map = {
+    jbexport: {
+      id: 'jbexport',
+      label: '전북수출통합지원시스템',
+      // 공고 리스트(지원사업) — view1.do 가 목록
+      listUrl:
+        'https://www.jbexport.or.kr/other/spWork/spWorkSupportBusiness/view1.do?menuUUID=402880867c8174de017c819251e70009',
+      /** 상세 수집 개수 제한 없음 */
+      maxDetail: Infinity,
+      /** 목록 1페이지당 행 수 — 테스트 시 start=0, length=본 값 1회 */
+      dtLength: 10,
+      /** true: 목록 start=0 한 번, 상세 1건만. false(기본): 전체 목록·상세 수집 + CSV */
+      jbexportTestMode: false,
+      /** 전체 수집 시 목록 POST 반복 상한 */
+      listPagesMax: 500,
+      /** getWork1Search.do 에 추가로 넣을 폼 필드 (F12 네트워크에서 확인 후 필요 시만 채움) */
+      jbexportListExtraParams: {},
+    },
+    bizinfo: {
+      id: 'bizinfo',
+      label: '기업마당_전북전체 (bizinfo)',
+      listUrl: 'https://www.bizinfo.go.kr/sii/siia/selectSIIA200View.do',
+      maxDetail: 10,
+    },
+    jbtp: {
+      id: 'jbtp',
+      label: '전북테크노파크 (jbtp)',
+      // 긴 쿼리는 프록시 408/422 유발 가능 → boardId 위주로 단축
+      listUrl: 'https://www.jbtp.or.kr/board/list.jbtp?boardId=BBS_0000001',
+      maxDetail: 10,
+    },
+    jbok: {
+      id: 'jbok',
+      label: '전북중소기업종합지원시스템 (jbok)',
+      listUrl: 'https://www.jbok.kr/spWork/supportOtherBusinessList.do?menuId=65',
+      maxDetail: 10,
+    },
+    jbio: {
+      id: 'jbio',
+      label: '전북바이오융합산업진흥원',
+      // TODO: 사용자가 제공한 목록/상세 URL이 없어서 스킵됩니다.
+      listUrl: '',
+      maxDetail: 0,
+    },
+  };
+
+  const selected = [];
+  const nodes = document.querySelectorAll('.checkbox-item input[type="checkbox"][data-source]:checked');
+  nodes.forEach((el) => {
+    const id = el.getAttribute('data-source');
+    if (map[id] && map[id].listUrl) selected.push(map[id]);
+  });
+  return selected;
+}
+
+/** 마크다운 링크 ](url) 에서 정규식이 url 끝의 ) 까지 먹는 경우 제거 */
+function sanitizeBizinfoDetailUrl(u) {
+  if (!u) return u;
+  let s = String(u).trim();
+  while (/[)\]\"]+$/.test(s)) s = s.replace(/[)\]\"]+$/, '');
+  return s;
+}
+
+function extractDetailUrlsFromList(listId, listUrl, listText) {
+  const text = listText || '';
+  const results = [];
+
+  if (listId === 'bizinfo') {
+    // 예: /sii/siia/selectSIIA200Detail.do?...pblancId=PBLN_...
+    const re = /https?:\/\/[^"'\\s<>]+\/sii\/siia\/selectSIIA200Detail\.do\?[^"'\\s<>]+|\/sii\/siia\/selectSIIA200Detail\.do\?[^"'\\s<>]+/g;
+    const matches = text.match(re) || [];
+    for (const m of matches) {
+      const raw = m.startsWith('/') ? 'https://www.bizinfo.go.kr' + m : m;
+      results.push(sanitizeBizinfoDetailUrl(raw));
+    }
+    return uniqLimit(results, 200);
+  }
+
+  if (listId === 'jbok') {
+    // 상세 URL은 보통 ...Detail....do? 로 끝나며, 목록(list) URL은 제외합니다.
+    const isJbokListNav = (u) =>
+      /supportOtherBusinessList\.do|supportBusinessList\.do|supportBusinessCalList\.do|supportBDetailedList\.do/i.test(u);
+    const norm = (m) => {
+      if (!m) return;
+      let u = m.trim();
+      if (u.startsWith('/')) u = 'https://www.jbok.kr' + u;
+      if (isJbokListNav(u)) return;
+      results.push(u);
+    };
+    // 1) /spWork/...Detail...do? (가장 일반적)
+    const reDetail = /(https?:\/\/www\.jbok\.kr\/spWork\/[^"'\\s<>]+Detail[^"'\\s<>]*\.do\?[^"'\\s<>]+|\/spWork\/[^"'\\s<>]+Detail[^"'\\s<>]*\.do\?[^"'\\s<>]+)/gi;
+    let m;
+    while ((m = reDetail.exec(text)) !== null) norm(m[1]);
+    // 2) supportOtherBusiness* 단, List가 아닌 링크
+    const reSOB = /(https?:\/\/www\.jbok\.kr\/[^"'\\s<>]*supportOtherBusiness[^"'\\s<>]*\.do\?[^"'\\s<>]+|\/[^"'\\s<>]*supportOtherBusiness[^"'\\s<>]*\.do\?[^"'\\s<>]+)/gi;
+    while ((m = reSOB.exec(text)) !== null) {
+      const u = m[1];
+      if (/List\.do/i.test(u)) continue;
+      norm(u);
+    }
+    // 3) 기업마당 지원사업: 테이블 행이 bizinfo.go.kr 상세(selectSIIA200Detail)로만 연결되는 경우가 많음 (런타임 확인)
+    const reBiz = /https?:\/\/[^"'\\s<>]+\/sii\/siia\/selectSIIA200Detail\.do\?[^"'\\s<>]+|\/sii\/siia\/selectSIIA200Detail\.do\?[^"'\\s<>]+/g;
+    const bizMatches = text.match(reBiz) || [];
+    for (const b of bizMatches) {
+      const raw = b.startsWith('/') ? 'https://www.bizinfo.go.kr' + b : b;
+      results.push(sanitizeBizinfoDetailUrl(raw));
+    }
+    // 4) contentsSid= 보강
+    if (results.length === 0) {
+      const re2 = /(https?:\/\/www\.jbok\.kr\/[^"'\\s<>]*\.do\?[^"'\\s<>]*contentsSid=|\/[^"'\\s<>]*\.do\?[^"'\\s<>]*contentsSid=)/gi;
+      const m2 = text.match(re2) || [];
+      for (const x of m2) norm(x);
+    }
+    return uniqLimit(results, 200);
+  }
+
+  if (listId === 'jbtp') {
+    // board list는 detail에 contentsSid= 쿼리값이 붙는 경우가 많음
+    const re = /(https?:\/\/www\.jbtp\.or\.kr\/[^"'\\s<>]*contentsSid=\d+[^"'\\s<>]*|\/[^"'\\s<>]*contentsSid=\d+[^"'\\s<>]*)/g;
+    const matches = text.match(re) || [];
+    for (const m of matches) {
+      if (m.startsWith('/')) results.push('https://www.jbtp.or.kr' + m);
+      else results.push(m);
+    }
+    return uniqLimit(results, 200);
+  }
+
+  if (listId === 'jbexport') {
+    /* 목록 수집은 POST getWork1Search + view.do?idx= 로 전환됨. HTML만 있을 때 보조 추출용 */
+    const base = 'https://www.jbexport.or.kr';
+    /** 목록 페이지 자체(view1 + 이 menuUUID)는 상세 링크에서 제외 */
+    const isThisListPage = (u) =>
+      /view1\.do/i.test(u) && /menuUUID=402880867c8174de017c819251e70009/i.test(u);
+    const pushNorm = (raw) => {
+      if (!raw) return;
+      let u = String(raw).trim();
+      if (u.startsWith('/')) u = base + u;
+      u = sanitizeBizinfoDetailUrl(u);
+      if (isThisListPage(u)) return;
+      if (!/^https?:\/\/www\.jbexport\.or\.kr\//i.test(u)) return;
+      results.push(u);
+    };
+    // /other/spWork/... *.do?... 전형적 링크
+    const re = /(https?:\/\/www\.jbexport\.or\.kr\/[^"'\\s<>]+\.do\?[^"'\\s<>]+|\/other\/[^"'\\s<>]+\.do\?[^"'\\s<>]+)/gi;
+    let m;
+    while ((m = re.exec(text)) !== null) pushNorm(m[1]);
+    // 기업마당 상세가 섞인 경우
+    const reBiz = /https?:\/\/[^"'\\s<>]+\/sii\/siia\/selectSIIA200Detail\.do\?[^"'\\s<>]+|\/sii\/siia\/selectSIIA200Detail\.do\?[^"'\\s<>]+/g;
+    const bizMatches = text.match(reBiz) || [];
+    for (const b of bizMatches) {
+      const raw = b.startsWith('/') ? 'https://www.bizinfo.go.kr' + b : b;
+      results.push(sanitizeBizinfoDetailUrl(raw));
+    }
+    return uniqLimit(results, Number.POSITIVE_INFINITY);
+  }
+
+  return [];
+}
+
+function uniqLimit(arr, limit) {
+  const out = [];
+  const seen = new Set();
+  for (const x of arr) {
+    if (!x) continue;
+    if (seen.has(x)) continue;
+    seen.add(x);
+    out.push(x);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
+/** 직접 fetch(원본 사이트) 타임아웃 */
+const FETCH_EXTRACT_TIMEOUT_MS = 55000;
+/** 프록시(jina·allorigins 등)는 응답이 길어 408/504 가 나기 쉬워 별도로 더 길게 */
+const FETCH_PROXY_TIMEOUT_MS = 90000;
+
+async function fetchWithTimeout(resource, init = {}, ms = FETCH_EXTRACT_TIMEOUT_MS) {
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => ctrl.abort(), ms);
+  try {
+    return await fetch(resource, { ...init, signal: ctrl.signal });
+  } finally {
+    clearTimeout(tid);
+  }
+}
+
+/**
+ * CORS 회피용 프록시 체인.
+ * - jina: 긴 URL → 422 시 encode 재시도
+ * - allorigins / corsproxy.io: 408·504 시 한 번 재시도
+ */
+async function fetchTextViaProxy(url) {
+  const t = FETCH_PROXY_TIMEOUT_MS;
+  const get = (resource) => fetchWithTimeout(resource, { method: 'GET' }, t);
+
+  let res = await get('https://r.jina.ai/' + url);
+  if (res.ok) return res.text();
+  let status = res.status;
+  if (status === 429) throw new Error('Proxy HTTP 429');
+  if ([422, 400, 403].includes(status)) {
+    res = await get('https://r.jina.ai/' + encodeURIComponent(url));
+    if (res.ok) return res.text();
+    status = res.status;
+    if (status === 429) throw new Error('Proxy HTTP 429');
+  }
+
+  const allOrigins = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+  res = await get(allOrigins);
+  if (res.ok) return res.text();
+  if (res.status === 429) throw new Error('Proxy HTTP 429');
+  if ([408, 504, 502, 503].includes(res.status)) {
+    await new Promise((r) => setTimeout(r, 800));
+    res = await get(allOrigins);
+    if (res.ok) return res.text();
+  }
+
+  res = await get('https://corsproxy.io/?' + encodeURIComponent(url));
+  if (res.ok) return res.text();
+  if (res.status === 429) throw new Error('Proxy HTTP 429');
+
+  throw new Error(`Proxy HTTP ${res.status}`);
+}
+
+/** jbtp 목록 직접 fetch용 (브라우저 UA) — 일부 환경에서 User-Agent 헤더는 무시될 수 있음 */
+const JBT_BROWSER_UA =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+/**
+ * jbtp 목록: 프록시 없이 직접 GET만 시도 (403·CORS 시 실패 로그 후 DOM fallback).
+ * @returns {{ html: string|null, text: string, listFetchFailed: boolean, extractedUrls?: string[] }}
+ */
+async function fetchJbtpListPageDirect(url, appendLog) {
+  const fetchUrl = withCacheBust(url);
+  const tryDom = async () => {
+    appendLog('  [DOM fallback] iframe에서 a[href*="contentsSid"] 시도…', 'info');
+    const urls = await tryJbtpDomFallbackExtractLinks(url, appendLog);
+    if (urls.length) {
+      appendLog(`  [DOM fallback] 링크 ${urls.length}건 추출`, 'ok');
+      return { html: null, text: urls.join('\n'), listFetchFailed: false, extractedUrls: urls };
+    }
+    return null;
+  };
+
+  try {
+    const res = await fetchWithTimeout(fetchUrl, {
+      method: 'GET',
+      headers: {
+        'User-Agent': JBT_BROWSER_UA,
+        Referer: 'https://www.jbtp.or.kr/',
+        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
+      },
+    });
+    __debugIngest15fb3d({
+      location: 'fetchJbtpListPageDirect',
+      message: 'jbtp list direct response',
+      data: { status: res.status, ok: res.ok },
+      hypothesisId: 'B',
+    });
+    if (!res.ok) {
+      appendLog(`  [리스트 오류] ${res.status} - 목록 HTML fetch 실패`, 'warn');
+      const dom = await tryDom();
+      if (dom) return dom;
+      appendLog('  [상세] 링크 추출 불가 (목록 fetch 실패)', 'warn');
+      return { html: null, text: '', listFetchFailed: true };
+    }
+    const html = await res.text();
+    return { html, text: html, listFetchFailed: false };
+  } catch (e) {
+    const msg = String(e?.message || e);
+    appendLog(`  [리스트 오류] 목록 HTML fetch 실패 (${msg})`, 'warn');
+    const dom = await tryDom();
+    if (dom) return dom;
+    appendLog('  [상세] 링크 추출 불가 (목록 fetch 실패)', 'warn');
+    return { html: null, text: '', listFetchFailed: true };
+  }
+}
+
+/**
+ * 숨김 iframe으로 목록 페이지를 로드한 뒤 a[href*="contentsSid"] 수집 (교차 출처 시 실패).
+ */
+function tryJbtpDomFallbackExtractLinks(listUrl, appendLog) {
+  return new Promise((resolve) => {
+    const id = '__jbtp_dom_fallback_iframe';
+    try {
+      const old = document.getElementById(id);
+      if (old) old.remove();
+    } catch (_) {
+      /* ignore */
+    }
+    const iframe = document.createElement('iframe');
+    iframe.id = id;
+    iframe.setAttribute('title', 'jbtp list DOM fallback');
+    iframe.style.cssText =
+      'position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none;border:0';
+    let done = false;
+    const finish = (urls) => {
+      if (done) return;
+      done = true;
+      try {
+        if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+      } catch (_) {
+        /* ignore */
+      }
+      resolve(urls);
+    };
+    const tid = setTimeout(() => {
+      appendLog('  [DOM fallback] 타임아웃(iframe 로드 지연)', 'warn');
+      finish([]);
+    }, 12000);
+    iframe.onload = () => {
+      clearTimeout(tid);
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!doc) throw new Error('no document');
+        const as = doc.querySelectorAll('a[href*="contentsSid"]');
+        const urls = [];
+        as.forEach((a) => {
+          let h = a.getAttribute('href');
+          if (!h) return;
+          if (h.startsWith('/')) h = 'https://www.jbtp.or.kr' + h;
+          else if (!/^https?:\/\//i.test(h)) h = 'https://www.jbtp.or.kr/' + String(h).replace(/^\//, '');
+          if (/contentsSid=\d+/.test(h)) urls.push(h.split('#')[0]);
+        });
+        const uniq = [...new Set(urls)];
+        if (uniq.length === 0) {
+          appendLog('  [DOM fallback] iframe 내 contentsSid 링크를 찾지 못했습니다.', 'warn');
+        }
+        finish(uniq);
+      } catch (_) {
+        appendLog('  [DOM fallback] 교차 출처 제한으로 iframe DOM에서 링크를 읽을 수 없습니다.', 'warn');
+        finish([]);
+      }
+    };
+    iframe.onerror = () => {
+      clearTimeout(tid);
+      appendLog('  [DOM fallback] iframe 로드 실패', 'warn');
+      finish([]);
+    };
+    iframe.src = listUrl;
+    document.body.appendChild(iframe);
+  });
+}
+
+async function fetchPageForExtract(url) {
+  const fetchUrl = withCacheBust(url);
+  // 브라우저 fetch는 CORS 때문에 실패할 수 있음.
+  // 1차: 원본 URL 직접
+  try {
+    const res = await fetchWithTimeout(fetchUrl, { method: 'GET' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const html = await res.text();
+    return { html, text: html };
+  } catch (e) {
+    const text = await fetchTextViaProxy(fetchUrl);
+    return { html: null, text };
+  }
+}
+
+function normalizeISODate(d) {
+  // d: 2026-02-05 / 2026.2.5 / 2026/02/05 형태를 ISO로 변환
+  const parts = String(d).trim().split(/[.\-\/]/).filter(Boolean);
+  if (parts.length !== 3) return null;
+  const [y, m, day] = parts;
+  if (!y || !m || !day) return null;
+  const mm = String(m).padStart(2, '0');
+  const dd = String(day).padStart(2, '0');
+  return `${y}-${mm}-${dd}`;
+}
+
+function extractPeriodISO(text) {
+  if (!text) return null;
+
+  // 2026-02-01~2026-02-28 형태
+  const range1 = text.match(/(\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2})\s*~\s*(\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2})/);
+  if (range1) {
+    const a = normalizeISODate(range1[1]);
+    const b = normalizeISODate(range1[2]);
+    if (a && b) return `${a}~${b}`;
+  }
+
+  // 2026-02-01부터 2026-02-28까지 형태
+  const range2 = text.match(/(\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2})\s*부터\s*(\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2})\s*까지/);
+  if (range2) {
+    const a = normalizeISODate(range2[1]);
+    const b = normalizeISODate(range2[2]);
+    if (a && b) return `${a}~${b}`;
+  }
+
+  return null;
+}
+
+function extractAfterKeyword(text, keywords) {
+  if (!text) return null;
+  for (const kw of keywords) {
+    const re = new RegExp(`${kw}\\s*[:：]?\\s*([^\\n\\r]{2,80})`, 'i');
+    const m = text.match(re);
+    if (m && m[1]) return String(m[1]).trim().slice(0, 150);
+  }
+  return null;
+}
+
+/** 접수기간 문구 추출 */
+function extractJbexportReceiptPeriod(text) {
+  const src = String(text || '');
+  const byKw = extractAfterKeyword(src, ['접수기간', '접수 기간', '신청기간', '신청 기간']);
+  if (byKw) return byKw.slice(0, 200);
+  const m1 = src.match(/접수\s*기간\s*[:：]?\s*([^\n\r]{4,120})/i);
+  if (m1) return m1[1].trim().slice(0, 200);
+  const dm = src.match(
+    /(\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2})\s*[~\u2013\-]\s*(\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2})/
+  );
+  if (dm) {
+    const pos = src.indexOf(dm[0]);
+    const ctx = src.slice(Math.max(0, pos - 100), pos + 80);
+    if (/접수|신청/i.test(ctx)) return `${dm[1]}~${dm[2]}`;
+  }
+  return '—';
+}
+
+function extractItemFromPage(url, html, text) {
+  const srcText = text || html || '';
+  if (!String(srcText).trim()) return null;
+
+  // 제목: og:title -> <title>
+  let title = null;
+  if (html) {
+    const og = html.match(/property=["']og:title["'][^>]*content=["']([^"']+)["']/i);
+    if (og && og[1]) title = og[1].trim();
+    if (!title) {
+      const t = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+      if (t && t[1]) title = t[1].trim();
+    }
+  }
+  if (!title) {
+    // 프록시 텍스트에서도 title/og:title이 포함될 수 있어 보강
+    const og2 = srcText.match(/property=["']og:title["'][^>]*content=["']([^"']+)["']/i);
+    if (og2 && og2[1]) title = og2[1].trim();
+    if (!title) {
+      const t2 = srcText.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+      if (t2 && t2[1]) title = t2[1].trim();
+    }
+    // r.jina.ai 등 마크다운 프록시: "Title: …" 또는 첫 번째 # 제목
+    if (!title) {
+      const jt = srcText.match(/^Title:\s*(.+)$/im);
+      if (jt && jt[1]) title = jt[1].trim().slice(0, 200);
+    }
+    if (!title) {
+      const hm = srcText.match(/^#\s+(.+)$/m);
+      if (hm && hm[1]) title = hm[1].trim().slice(0, 200);
+    }
+    const firstLine = srcText.split(/\r?\n/).map(s => s.trim()).filter(Boolean)[0];
+    title = firstLine ? firstLine.slice(0, 120) : '(제목 파싱 실패)';
+  }
+
+  // 기관
+  const agency = extractAfterKeyword(srcText, ['주최', '주관', '기관', '발행', '운영', '주관기관']) || '—';
+
+  // 상태(간단 휴리스틱)
+  let status = '접수중';
+  if (/접수마감|마감|종료|모집종료|마감일/i.test(srcText)) status = '접수마감';
+  else if (/공고중|공고/i.test(srcText)) status = '공고중';
+
+  // 기간
+  const period = extractPeriodISO(srcText) || '—';
+
+  // 모달 요약 필드
+  const target = extractAfterKeyword(srcText, ['지원대상', '대상', '지원대상자']) || '—';
+  const content = extractAfterKeyword(srcText, ['지원내용', '내용', '지원', '지원프로그램']) || '—';
+  const howto = extractAfterKeyword(srcText, ['신청방법', '신청', '접수방법']) || '—';
+  const amount = extractAfterKeyword(srcText, ['지원규모', '지원금', '지원액', '지원내용(금액)', '지원범위']) || '—';
+
+  return {
+    title,
+    agency,
+    status,
+    period,
+    isNew: true,
+    summary: {
+      target,
+      content,
+      howto,
+      amount,
+    },
+  };
+}
+
+/**
+ * 상세 HTML에서 본문 후보 div 영역 innerHTML (DOMParser)
+ * @returns {{ innerHtml: string, matchedSelector: string|null }}
+ */
+function jbexportGetMainContentMeta(html) {
+  if (!html || typeof html !== 'string') return { innerHtml: '', matchedSelector: null };
+  try {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const selectors = [
+      '#contents',
+      '#content',
+      '#subContent',
+      '#article',
+      'article',
+      'main',
+      '.contents',
+      '.content',
+      '.board_view',
+      '.view_cont',
+      '.sub_cont',
+      '.detail_cont',
+      '.bbs_view',
+    ];
+    for (const sel of selectors) {
+      const el = doc.querySelector(sel);
+      const t = el?.textContent?.replace(/\s+/g, ' ').trim() || '';
+      if (t.length > 80) return { innerHtml: el.innerHTML, matchedSelector: sel };
+    }
+    if (doc.body?.innerHTML) {
+      return { innerHtml: doc.body.innerHTML, matchedSelector: 'body' };
+    }
+  } catch (_) {
+    /* ignore */
+  }
+  return { innerHtml: html, matchedSelector: null };
+}
+
+/** 본문 후보: 태그 제거 후 앞 n자 */
+function jbexportPlainBodyPreview(html, text, maxLen) {
+  let raw = String(text || '');
+  if (html && (!raw || raw.length < 80)) {
+    raw = String(html)
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  raw = raw.replace(/\s+/g, ' ').trim();
+  return raw.slice(0, maxLen);
+}
+
+/**
+ * 본문 전체: 우선 본문 div(innerHTML)에서 텍스트 추출, 없으면 전체 HTML
+ * @returns {{ text: string, truncated: boolean, totalLen: number, mainSelector: string|null }}
+ */
+function jbexportPlainBodyFull(html, text, maxLogLen) {
+  let fragment = '';
+  let mainSelector = null;
+  if (html) {
+    const meta = jbexportGetMainContentMeta(html);
+    fragment = meta.innerHtml || html;
+    mainSelector = meta.matchedSelector;
+  }
+  let raw = String(text || '');
+  if (fragment && (!raw || raw.length < 80)) {
+    raw = String(fragment)
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  raw = raw.replace(/\s+/g, ' ').trim();
+  const max = maxLogLen == null ? 12000 : maxLogLen;
+  if (raw.length > max) {
+    return {
+      text: raw.slice(0, max),
+      truncated: true,
+      totalLen: raw.length,
+      mainSelector,
+    };
+  }
+  return { text: raw, truncated: false, totalLen: raw.length, mainSelector };
+}
+
+/** 첨부·다운로드로 보이는 href 목록 (절대경로 보강) */
+function jbexportListAttachmentHrefs(html, text, baseOrigin) {
+  const s = String(html || '') + '\n' + String(text || '');
+  const re = /<a[^>]+href=["']([^"']+)["'][^>]*>/gi;
+  const out = [];
+  const seen = new Set();
+  let m;
+  while ((m = re.exec(s)) !== null) {
+    let h = (m[1] || '').trim();
+    if (!h || h.startsWith('#') || h.startsWith('javascript:')) continue;
+    if (h.startsWith('/')) h = (baseOrigin || 'https://www.jbexport.or.kr') + h;
+    const low = h.toLowerCase();
+    const ok =
+      /\.(pdf|hwp|hwpx|doc|docx|xls|xlsx|zip|ppt|pptx)(\?|#|$)/i.test(low) ||
+      /attach|download|fileid|atchfile|getfile|filedown|fileseq|\.do\?[^"']*file/i.test(low) ||
+      /\/file\//i.test(low);
+    if (ok && !seen.has(h)) {
+      seen.add(h);
+      out.push(h);
+    }
+  }
+  return out;
+}
+
+/** <a href> 중 첨부·다운로드로 보이는 링크 개수 */
+function jbexportCountAttachmentLinks(html, text) {
+  return jbexportListAttachmentHrefs(html, text).length;
+}
+
+function jbexportDecodeJsString(s) {
+  if (s == null) return '';
+  try {
+    return String(s)
+      .replace(/\\n/g, '\n')
+      .replace(/\\r/g, '\r')
+      .replace(/\\t/g, '\t')
+      .replace(/\\"/g, '"')
+      .replace(/\\'/g, "'");
+  } catch (_) {
+    return String(s || '');
+  }
+}
+
+function jbexportExtractJsField(html, key) {
+  const src = String(html || '');
+  const esc = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const patterns = [
+    new RegExp(`\\b${esc}\\b\\s*[:=]\\s*"((?:\\\\.|[^"\\\\])*)"`, 'i'),
+    new RegExp(`\\b${esc}\\b\\s*[:=]\\s*'((?:\\\\.|[^'\\\\])*)'`, 'i'),
+    new RegExp(`\\b${esc}\\b\\s*[:=]\\s*\`([\\s\\S]*?)\``, 'i'),
+  ];
+  for (const re of patterns) {
+    const m = src.match(re);
+    if (m && m[1] != null) return jbexportDecodeJsString(m[1]).trim();
+  }
+  return '';
+}
+
+function jbexportLooksLikeTemplateNoise(s) {
+  const t = String(s || '').trim();
+  if (!t) return false;
+  return (
+    /\+\s*v\.[A-Z0-9_]+\s*\+/i.test(t) ||
+    /NOTE_TITLE|NOTE_CONTENT|jsrender|tmpl|{{|}}\s*/i.test(t) ||
+    /보기\s*새창열림/.test(t)
+  );
+}
+
+function jbexportLooksLikeMetaNoise(s) {
+  const t = String(s || '').replace(/\s+/g, ' ').trim().toLowerCase();
+  if (!t) return false;
+  return (
+    t === 'ie=edge' ||
+    t.includes('x-ua-compatible') ||
+    t.includes('http-equiv') ||
+    t.includes('charset=') ||
+    t.includes('viewport')
+  );
+}
+
+function jbexportLooksLikeLabelOnly(s) {
+  const t = String(s || '').replace(/\s+/g, ' ').trim();
+  if (!t) return true;
+  if (t.length <= 8 && /^(지원내용|신청방법|지원규모|내용|상세내용|보기|바로가기)$/.test(t)) return true;
+  return false;
+}
+
+function jbexportPickLongestDivText(html) {
+  try {
+    const doc = new DOMParser().parseFromString(String(html || ''), 'text/html');
+    // 1) 공통 레이아웃(헤더/네비/푸터/스크립트 등) 제거 후 스코어링
+    const removeSelectors = [
+      'script',
+      'style',
+      'header',
+      'nav',
+      'footer',
+      '#header',
+      '#footer',
+      '#gnb',
+      '.gnb',
+      '.header',
+      '.footer',
+      '.nav',
+      '.menu',
+      '.snb',
+      '.lnb',
+      '.breadcrumb',
+    ];
+    for (const sel of removeSelectors) {
+      for (const el of Array.from(doc.querySelectorAll(sel))) {
+        try {
+          el.remove();
+        } catch (_) {
+          /* ignore */
+        }
+      }
+    }
+
+    const commonUiWords = [
+      '로그인',
+      '회원가입',
+      '마이페이지',
+      '사이트맵',
+      '공지사항',
+      '전체메뉴',
+      '수출통합지원센터',
+      '전북특별자치도 수출통합지원시스템',
+      '선정결과',
+      '기타 지원',
+      '지원사업',
+    ];
+    const isBoilerplate = (t) => {
+      const s = String(t || '');
+      let hit = 0;
+      for (const w of commonUiWords) if (s.includes(w)) hit++;
+      return hit >= 4;
+    };
+
+    const divs = Array.from(doc.querySelectorAll('div'));
+    const scored = divs
+      .map((el, idx) => {
+        const txt = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+        const id = String(el.getAttribute('id') || '');
+        const cls = String(el.getAttribute('class') || '');
+        return { idx, len: txt.length, txt, id, cls };
+      })
+      .filter((x) => x.len > 120)
+      .sort((a, b) => b.len - a.len);
+
+    for (const c of scored.slice(0, 40)) {
+      if (jbexportLooksLikeTemplateNoise(c.txt) || jbexportLooksLikeMetaNoise(c.txt)) continue;
+      if (jbexportLooksLikeLabelOnly(c.txt)) continue;
+      if (isBoilerplate(c.txt)) continue;
+      // #region agent log
+      __debugIngest15fb3d({
+        location: 'jbexportPickLongestDivText',
+        message: 'picked div text',
+        data: {
+          idx: c.idx,
+          len: c.len,
+          id: c.id,
+          class: c.cls,
+          preview80: c.txt.slice(0, 80),
+        },
+        hypothesisId: 'H10',
+      });
+      // #endregion
+      return c.txt;
+    }
+  } catch (_) {
+    /* ignore */
+  }
+  return '';
+}
+
+function jbexportExtractFromHiddenFields(html, keys) {
+  try {
+    const doc = new DOMParser().parseFromString(String(html || ''), 'text/html');
+    for (const k of keys) {
+      const q = [
+        `input[name="${k}"]`,
+        `input[id="${k}"]`,
+        `textarea[name="${k}"]`,
+        `textarea[id="${k}"]`,
+      ];
+      for (const sel of q) {
+        const el = doc.querySelector(sel);
+        const v = String(el?.value || el?.textContent || '').trim();
+        if (v) return jbexportDecodeJsString(v);
+      }
+    }
+  } catch (_) {
+    /* ignore */
+  }
+  return '';
+}
+
+function jbexportExtractDetailStructured(detailUrl, html, text) {
+  const body = String(text || '');
+  const noteTitle =
+    jbexportExtractJsField(html, 'NOTE_TITLE') ||
+    jbexportExtractJsField(html, 'NOTE_NM') ||
+    jbexportExtractJsField(html, 'TITLE');
+  const noteContent =
+    jbexportExtractJsField(html, 'NOTE_CONTENT') ||
+    jbexportExtractJsField(html, 'NOTE_CN') ||
+    jbexportExtractJsField(html, 'CONTENT') ||
+    jbexportExtractFromHiddenFields(html, ['NOTE_CONTENT', 'NOTE_CN', 'CONTENT']);
+  const supportByKeyword = extractAfterKeyword(body, ['지원내용']) || '';
+  let supportContent = supportByKeyword || noteContent || '';
+  if (
+    jbexportLooksLikeLabelOnly(supportContent) ||
+    jbexportLooksLikeTemplateNoise(supportContent) ||
+    jbexportLooksLikeMetaNoise(supportContent)
+  ) {
+    supportContent = '';
+  }
+  if (!supportContent) {
+    supportContent = jbexportPickLongestDivText(html);
+  }
+  const howto = extractAfterKeyword(body, ['신청방법', '접수방법']) || '';
+  const amount = extractAfterKeyword(body, ['지원규모', '지원금', '지원액']) || '';
+  const attachList = jbexportListAttachmentHrefs(html, text);
+  // #region agent log
+  __debugIngest15fb3d({
+    location: 'jbexportExtractDetailStructured',
+    message: 'detail structured parsed',
+    data: {
+      detailUrl: String(detailUrl || ''),
+      hasNoteTitle: Boolean(noteTitle),
+      noteContentLen: noteContent.length,
+      noteContentPreview: String(noteContent || '').slice(0, 40),
+      supportByKeywordLen: supportByKeyword.length,
+      supportContentLen: supportContent.length,
+      supportContentPreview: String(supportContent || '').slice(0, 40),
+      howtoLen: howto.length,
+      amountLen: amount.length,
+      attachCount: Array.isArray(attachList) ? attachList.length : 0,
+      noteContentIsNoise: jbexportLooksLikeTemplateNoise(noteContent) || jbexportLooksLikeMetaNoise(noteContent),
+    },
+    hypothesisId: 'H5',
+  });
+  // #endregion
+  return {
+    상세URL: String(detailUrl || ''),
+    지원내용: supportContent || '',
+    신청방법: howto || '',
+    지원규모: amount || '',
+    첨부파일: Array.isArray(attachList) ? attachList : [],
+  };
+}
+
+/** 수집 시작 버튼 — 예전 시뮬레이션(setTimeout 로그)은 제거됨, 실제 수집만 실행 */
+function runDemo() {
+  return runRealCollect();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  restoreCustomSourcesFromStorage();
+
+  currentFilteredData = TABLE_ROWS;
+
+  updateChartsFromTableRows();
+  updateLastCollectUi();
+
+  // 마감임박 수 업데이트
+  const deadlineCount = countDeadlineNear();
+  document.getElementById('deadlineCount').textContent = deadlineCount;
+
+  renderTable();
+  initColumnResize();
+});
+
+// 컬럼 리사이즈 기능
+function initColumnResize() {
+  const table = document.querySelector('table');
+  const cols = table.querySelectorAll('th');
+  
+  cols.forEach((col, index) => {
+    const resizeHandle = col.querySelector('.resize-handle');
+    if (!resizeHandle) return; // 마지막 컬럼은 리사이즈 핸들 없음
+    
+    let startX, startWidth, nextStartWidth;
+    
+    resizeHandle.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      
+      const nextCol = cols[index + 1];
+      
+      startX = e.pageX;
+      startWidth = col.offsetWidth;
+      nextStartWidth = nextCol ? nextCol.offsetWidth : 0;
+      
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      // 드래그 중 선택 방지
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'col-resize';
+    });
+    
+    function handleMouseMove(e) {
+      const diff = e.pageX - startX;
+      
+      // 최소 너비 50px
+      const newWidth = Math.max(50, startWidth + diff);
+      const newNextWidth = nextStartWidth ? Math.max(50, nextStartWidth - diff) : 0;
+      
+      // 퍼센트로 변환
+      const tableWidth = table.offsetWidth;
+      const widthPercent = (newWidth / tableWidth * 100).toFixed(1);
+      const nextWidthPercent = nextStartWidth ? (newNextWidth / tableWidth * 100).toFixed(1) : 0;
+      
+      col.style.width = widthPercent + '%';
+      if (nextCol) {
+        nextCol.style.width = nextWidthPercent + '%';
+      }
+    }
+    
+    function handleMouseUp() {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+    }
+  });
+}
+</script>
+
+</body>
+</html>
