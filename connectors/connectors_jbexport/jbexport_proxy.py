@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -1083,6 +1084,11 @@ def _canonical_jbexport_detail_url(sp_seq: str, menu_uuid: str) -> str:
     return f"{detail1_base}?{urlencode(q)}"
 
 
+def jbexport_canonical_detail_url(sp_seq: str, menu_uuid: str | None = None) -> str:
+    """파이프라인 등 외부 모듈용 상세 URL (view1.do 기준 detail1.do)."""
+    return _canonical_jbexport_detail_url(sp_seq, menu_uuid or DEFAULT_MENU_UUID)
+
+
 def jbexport_detail_html_analysis(html: str) -> Dict[str, Any]:
     """detail1.do 응답이 실제 상세 본문인지 추정(길이·첨부 UI·지원사업 키워드 등)."""
     h = html or ""
@@ -1421,6 +1427,77 @@ def paths_from_view_url(view_url: str) -> Tuple[str, str]:
     get_work = urlunparse((u.scheme, u.netloc, f"{base_dir}/getWork1Search.do", "", "", ""))
     detail1 = urlunparse((u.scheme, u.netloc, f"{base_dir}/detail1.do", "", "", ""))
     return get_work, detail1
+
+
+def jbexport_post_work1_search(
+    session: requests.Session,
+    *,
+    start: int,
+    length: int = 10,
+    draw: int = 1,
+    work_year: str = "2026",
+    client_view_url: str | None = None,
+) -> Tuple[Optional[Dict[str, Any]], str]:
+    """getWork1Search.do POST 한 페이지. 성공 시 upstream JSON dict, 실패 시 (None, 이유)."""
+    view = (client_view_url or "").strip() or DEFAULT_VIEW_URL
+    referer = UPSTREAM_REFERER
+    get_work_url, _ = paths_from_view_url(view)
+    payload: Dict[str, str] = {
+        "draw": str(draw),
+        "start": str(start),
+        "length": str(length),
+        "work_year": work_year,
+        "tsGubun": "",
+        "stat": "",
+        "js": "",
+        "js_input": "",
+        "su": "",
+        "search[value]": "",
+        "search[regex]": "false",
+        "columns[0][data]": "0",
+        "columns[1][data]": "CODE_K",
+        "columns[2][data]": "CATEGO",
+        "columns[3][data]": "js_title",
+        "columns[4][data]": "STS_TXT",
+    }
+    for i in range(5):
+        payload[f"columns[{i}][name]"] = ""
+        payload[f"columns[{i}][searchable]"] = "true"
+        payload[f"columns[{i}][orderable]"] = "true"
+        payload[f"columns[{i}][search][value]"] = ""
+        payload[f"columns[{i}][search][regex]"] = "false"
+    payload["order[0][column]"] = "0"
+    payload["order[0][dir]"] = "desc"
+    referer_origin = f"{urlparse(referer).scheme}://{urlparse(referer).netloc}"
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Referer": referer,
+        "Origin": referer_origin,
+        "User-Agent": session.headers.get("User-Agent", "Mozilla/5.0"),
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+    }
+    try:
+        session.get(
+            view,
+            headers={"Referer": referer, "User-Agent": session.headers.get("User-Agent", "Mozilla/5.0")},
+            timeout=90,
+            verify=False,
+        )
+        r = session.post(get_work_url, data=payload, headers=headers, timeout=90, verify=False)
+    except requests.RequestException as e:
+        return None, str(e)
+    if r.status_code >= 400:
+        return None, f"upstream_http_{r.status_code}"
+    ct = (r.headers.get("content-type") or "").lower()
+    if "json" not in ct:
+        return None, "non_json_response"
+    try:
+        j = r.json()
+    except Exception as e:
+        return None, f"json_parse_error:{e}"
+    if not isinstance(j, dict):
+        return None, "invalid_json_shape"
+    return j, ""
 
 
 @app.get("/health")
@@ -1860,6 +1937,26 @@ def api_jbexport_detail() -> Any:
             ),
             500,
         )
+
+
+@app.route("/api/jbexport/run", methods=["OPTIONS"])
+def api_jbexport_run_options() -> Any:
+    return ("", 204)
+
+
+@app.route("/api/jbexport/run", methods=["POST"])
+def run_pipeline() -> Any:
+    """일일 목록 수집·저장·어제 대비 신규 공고 (pipeline.run_daily)."""
+    root = Path(__file__).resolve().parents[2]
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    try:
+        from pipeline.jbexport_daily import run_daily
+
+        result = run_daily()
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"status": "error", "error": str(e)}), 200
 
 
 if __name__ == "__main__":

@@ -1,7 +1,17 @@
 from fastapi import FastAPI
 import os
+import sys
+from pathlib import Path
+
 import requests
 from bs4 import BeautifulSoup
+
+# 프로젝트 루트를 path에 두어 pipeline import 가능하게 함
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+from pipeline.jbexport_daily import run_daily
 
 app = FastAPI()
 
@@ -39,3 +49,8 @@ def download():
         f.write(res.content)
 
     return {"result": "downloaded"}
+
+
+@app.post("/api/jbexport/run")
+def run_jbexport_pipeline():
+    return run_daily()
