@@ -3,3 +3,7 @@ __pycache__/
 *.pyc
 .env
 debug*.log
+
+data/jbexport/files/
+
+downloads/
