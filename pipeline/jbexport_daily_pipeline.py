@@ -9,7 +9,16 @@
 4) 어제 JSON 로드
 5) URL(상세URL) 기준 신규 공고 비교/출력
 """
+from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "data"
+JBEXPORT_DIR = DATA_DIR / "jbexport"
+JSON_DIR = JBEXPORT_DIR / "json"
+FILES_DIR = JBEXPORT_DIR / "files"
+
+JSON_DIR.mkdir(parents=True, exist_ok=True)
+FILES_DIR.mkdir(parents=True, exist_ok=True)
 from __future__ import annotations
 
 import json
@@ -20,12 +29,20 @@ from typing import Any, Dict, List
 import requests
 
 # ===== 설정 =====
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "data"
+JBEXPORT_DIR = DATA_DIR / "jbexport"
+JSON_DIR = JBEXPORT_DIR / "json"
+FILES_DIR = JBEXPORT_DIR / "files"
+
+JSON_DIR.mkdir(parents=True, exist_ok=True)
+FILES_DIR.mkdir(parents=True, exist_ok=True)
+
 PROXY_BASE = "http://127.0.0.1:5000"
 LIST_ENDPOINT = f"{PROXY_BASE}/api/jbexport/list"
 LIST_LENGTH = 10
 MAX_PAGES = 500
 OPEN_STATUSES = {"접수중", "공고중"}
-OUT_DIR = Path(".")
 
 
 def log(message: str) -> None:
@@ -135,24 +152,26 @@ def filter_open_announcements(results: List[Dict[str, str]]) -> List[Dict[str, s
     return filtered
 
 
-def _json_path_for(target_date: date) -> Path:
-    return OUT_DIR / f"jbexport_{target_date.isoformat()}.json"
+def json_path_for(target_date: date) -> Path:
+    return JSON_DIR / f"jbexport_{target_date.isoformat()}.json"
 
 
-def save_today_json(open_announcements: List[Dict[str, str]]) -> Path:
-    """오늘 날짜 파일로 저장."""
-    path = _json_path_for(date.today())
+def new_json_path() -> Path:
+    return JBEXPORT_DIR / "jbexport_new.json"
+
+def save_today_json(open_announcements):
+    path = json_path_for(date.today())
     path.write_text(
         json.dumps(open_announcements, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
     log(f"[저장] {path.name} ({len(open_announcements)}건)")
     return path
 
-
 def load_yesterday_json() -> List[Dict[str, Any]]:
     """어제 파일 로드 (없으면 빈 리스트)."""
-    y_path = _json_path_for(date.today() - timedelta(days=1))
+    y_path = json_path_for(date.today() - timedelta(days=1))
     if not y_path.exists():
         log(f"[로드] 어제 파일 없음: {y_path.name}")
         return []
@@ -206,6 +225,10 @@ def pipeline() -> List[Dict[str, str]]:
         save_today_json(open_items)
         yesterday_items = load_yesterday_json()
         new_items = find_new_announcements(open_items, yesterday_items)
+        new_json_path().write_text(
+            json.dumps(new_items, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
         print_new_announcements(new_items)
         return new_items
     except Exception as e:
